@@ -38,6 +38,12 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
+  const username = req.body.username;
+
+  if(!username){
+    return res.status(404).json({ message: "Username is not found!" });
+  }
+
   try {
     const user = await Users.findOne({
       where: { username: req.body.username },
