@@ -13,7 +13,7 @@ sequelize
 const forceSync = async () => {
   try {
     await sequelize.query("SET FOREIGN_KEY_CHECKS = 0");
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ force: false });
     await sequelize.query("SET FOREIGN_KEY_CHECKS = 1");
   } catch (err) {
     console.log(err);
@@ -21,11 +21,6 @@ const forceSync = async () => {
 };
 
 forceSync();
-
-// sequelize
-//   .sync({ force: true })
-//   .then(() => console.log("Re-Sync with database"))
-//   .catch((err) => console.log(err));
 
 const db = {};
 
@@ -73,7 +68,10 @@ db.likes.belongsTo(db.posts, { foreignKey: "postID" });
 
 // ---------- USER AND MESSAGES RELATIONSHIP START----------
 db.users.hasMany(db.messages, { foreignKey: "senderID" });
-db.users.hasMany(db.messages, { as: "messageReceiver", foreignKey: "receiverID" });
+db.users.hasMany(db.messages, {
+  as: "messageReceiver",
+  foreignKey: "receiverID",
+});
 // ---------- USER AND MESSAGES RELATIONSHIP END----------
 
 module.exports = db;
