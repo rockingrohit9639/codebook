@@ -1,13 +1,17 @@
 const db = require("../db/connection");
 const Users = db.users;
 const Posts = db.posts;
+const Friendships = db.friendships;
 
 const testing = async (req, res) => {
   try {
-    const user = await Users.findOne({where: {userID: 1}});
-    const posts = await user.getPosts();
+    const friends = await Friendships.findAll({
+        where: {
+            status: 1,
+        }
+    });
 
-    return res.json(posts);
+    return res.json(friends);
   } catch (err) {
     console.log(err);
   }
