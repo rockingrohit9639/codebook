@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
     res.status(200).json({ status: "OK" });
 })
 
-app.use("/api/user", require("./Routers/users"));
+app.use("/api/auth", require("./Routers/auth"));
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
