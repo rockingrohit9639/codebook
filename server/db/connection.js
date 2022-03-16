@@ -34,6 +34,7 @@ db.users = require("./models/User")(sequelize, DataTypes);
 db.posts = require("./models/Post")(sequelize, DataTypes);
 db.friendships = require("./models/Friendships")(sequelize, DataTypes);
 db.comments = require("./models/Comments")(sequelize, DataTypes);
+db.likes = require("./models/Likes")(sequelize, DataTypes);
 
 // ---------- USER AND POST RELATIONSHIP START----------
 db.users.hasMany(db.posts, { foreignKey: "userID" });
@@ -60,5 +61,13 @@ db.comments.belongsTo(db.users, { foreignKey: "userID" });
 db.posts.hasMany(db.comments, { foreignKey: "postID" });
 db.comments.belongsTo(db.posts, { foreignKey: "postID" });
 // ---------- USER, POST AND COMMENTS RELATIONSHIP END----------
+
+// ---------- USER, POST AND LIKES RELATIONSHIP START----------
+db.users.hasMany(db.likes, { foreignKey:  "userID"});
+db.likes.belongsTo(db.users, { foreignKey: "userID" });
+
+db.posts.hasMany(db.likes, { foreignKey: "postID"});
+db.likes.belongsTo(db.posts, { foreignKey: "postID" })
+// ---------- USER, POST AND LIKES RELATIONSHIP END----------
 
 module.exports = db;
