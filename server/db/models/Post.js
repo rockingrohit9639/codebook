@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     postID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncreament: true,
+      autoIncrement: true,
     },
     imgURL: {
       type: DataTypes.STRING,

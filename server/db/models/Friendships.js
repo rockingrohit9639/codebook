@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     friendshipID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncreament: true,
+      autoIncrement: true,
     },
     status: {
       type: DataTypes.INTEGER,

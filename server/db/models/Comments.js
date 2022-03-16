@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       commentID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncreament: true,
+        autoIncrement: true,
       },
       body: DataTypes.STRING,
     },
