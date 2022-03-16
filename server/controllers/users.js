@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const CryptoJS = require("crypto-js");
 const Users = db.users;
 const Posts = db.posts;
 const Friendships = db.friendships;
@@ -16,13 +17,14 @@ const register = async (req, res) => {
       email,
       gender,
       DOB,
-      password,
+      password: CryptoJS.AES.encrypt(password, process.env.CRYPTO_SECRET_KEY).toString(),
     });
 
     if (newUser) {
       return res.status(201).json({ message: "Registration success." });
     }
   } catch (e) {
+      console.log(e)
     const errors = [];
     if (e.errors) {
       e.errors.forEach((err) => {
@@ -36,6 +38,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
+
     return res.json({ message: "OK" });
   } catch (err) {
     console.log(err);
