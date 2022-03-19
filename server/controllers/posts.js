@@ -7,7 +7,7 @@ const createPost = async (req, res) => {
   }
   try {
     const post = await Posts.create({
-      postTitle: req.body.title || "Code by Codebook",
+      postTitle: req.body.postTitle !== undefined ? req.body.postTitle : null,
       // codeSnippet: req.body.codeSnippet || "console.log('No code snippet')",
       imgURL: req.body.imgURL,
       userID: req.userID,
@@ -35,4 +35,19 @@ const getAllPosts = async (req, res) => {
   }
 };
 
-module.exports = { createPost, getAllPosts };
+const getUserPosts = async (req, res) => {
+  try {
+    const userPosts = await Posts.findAll({
+      where: {
+        userID: req.userID,
+      },
+    });
+
+    return res.status(200).json(userPosts);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Internal Server Error." });
+  }
+};
+
+module.exports = { createPost, getAllPosts, getUserPosts };
