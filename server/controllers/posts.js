@@ -50,4 +50,25 @@ const getUserPosts = async (req, res) => {
   }
 };
 
-module.exports = { createPost, getAllPosts, getUserPosts };
+const getPostDetails = async (req, res) => {
+  try {
+    const postDetails = await Posts.findOne({
+      where: {
+        postID: req.params.postID
+      }
+    });
+
+    if(!postDetails){
+      return res.status(404).json({ message: "Could not find the post."});
+    }
+
+    return res.status(200).json(postDetails);
+    
+  }
+  catch(err){
+    console.error(err);
+    return res.status(500).json({ message: "Internal Server Error." });
+  }
+}
+
+module.exports = { createPost, getAllPosts, getUserPosts, getPostDetails };
