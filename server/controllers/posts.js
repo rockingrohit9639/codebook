@@ -54,21 +54,52 @@ const getPostDetails = async (req, res) => {
   try {
     const postDetails = await Posts.findOne({
       where: {
-        postID: req.params.postID
-      }
+        postID: req.params.postID,
+      },
     });
 
-    if(!postDetails){
-      return res.status(404).json({ message: "Could not find the post."});
+    if (!postDetails) {
+      return res.status(404).json({ message: "Could not find the post." });
     }
 
     return res.status(200).json(postDetails);
-    
-  }
-  catch(err){
+  } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal Server Error." });
   }
-}
+};
 
-module.exports = { createPost, getAllPosts, getUserPosts, getPostDetails };
+const deletePost = async (req, res) => {
+  try {
+    const post = await Posts.findOne({
+      where: {
+        postID: req.params.postID,
+      },
+    });
+
+    if (!post) {
+      return res.status(404).json({ message: "Could not find the post." });
+    }
+
+    if (post.dataValues.userID === req.userID) {
+      await post.destroy();
+
+      return res.status(200).json({ message: "Post deleted successfully." });
+    } else {
+      return res
+        .status(400)
+        .json({ message: "You are not authorized to delete this post." });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Internal Server Error." });
+  }
+};
+
+module.exports = {
+  createPost,
+  getAllPosts,
+  getUserPosts,
+  getPostDetails,
+  deletePost,
+};
