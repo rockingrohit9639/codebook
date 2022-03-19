@@ -13,9 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: "Code by Codebook",
     },
-    codeSnippet: {
-      type: DataTypes.STRING,
-    }
+    // codeSnippet: {
+    //   type: DataTypes.STRING,
+    // }
   });
 
   return Posts;
