@@ -13,6 +13,6 @@ router.post("/create", verifyToken, createPost);
 router.get("/getAllPosts", verifyToken, getAllPosts);
 router.get("/getUserPosts", verifyToken, getUserPosts);
 router.get("/getPostDetails/:postID", verifyToken, getPostDetails);
-router.put("/deletePost/:postID", verifyToken, deletePost);
+router.delete("/deletePost/:postID", verifyToken, deletePost);
 
 module.exports = router;
