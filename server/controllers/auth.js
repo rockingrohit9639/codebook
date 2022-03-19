@@ -2,8 +2,6 @@ const db = require("../db/connection");
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
 const Users = db.users;
-const Posts = db.posts;
-const Friendships = db.friendships;
 
 const register = async (req, res) => {
   const username = req.body.username;
@@ -40,7 +38,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const username = req.body.username;
 
-  if(!username){
+  if (!username) {
     return res.status(404).json({ message: "Username is not found!" });
   }
 
@@ -66,9 +64,11 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid Credentials!" });
     }
 
+    // console.log(user.dataValues.userID)
+
     const accessToken = jwt.sign(
       {
-        userID: user.userID,
+        userID: user.dataValues.userID,
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "3d" }
@@ -76,8 +76,7 @@ const login = async (req, res) => {
 
     const { password, ...others } = user.dataValues;
 
-    return res.status(200).json({ accessToken, ...others})
-
+    return res.status(200).json({ ...others, accessToken });
   } catch (err) {
     console.log(err);
   }
