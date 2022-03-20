@@ -1,5 +1,6 @@
 const db = require("../db/connection");
 const Posts = db.posts;
+const Likes = db.likes;
 
 const createPost = async (req, res) => {
   if (!req.body.imgURL) {
@@ -96,10 +97,39 @@ const deletePost = async (req, res) => {
   }
 };
 
+const likePost = async (req, res) => {
+  try {
+    const post = await Posts.findOne({
+      where: {
+        postID: req.params.postID,
+      },
+    });
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found." });
+    }
+
+    const like = await Likes.create({
+      userID: req.userID,
+      postID: req.params.postID,
+    });
+
+    if (!like) {
+      return res.status(400).json({ message: "Could not like the post." });
+    }
+
+    return res.status(200).json({ message: "Post liked success." });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Internal Server Error." });
+  }
+};
+
 module.exports = {
   createPost,
   getAllPosts,
   getUserPosts,
   getPostDetails,
   deletePost,
+  likePost,
 };
