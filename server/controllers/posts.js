@@ -1,6 +1,7 @@
 const db = require("../db/connection");
 const Posts = db.posts;
 const Likes = db.likes;
+const Comments = db.comments;
 
 const createPost = async (req, res) => {
   if (!req.body.imgURL) {
@@ -125,6 +126,41 @@ const likePost = async (req, res) => {
   }
 };
 
+const commentPost = async (req, res) => {
+  try {
+    const post = await Posts.findOne({
+      where: {
+        postID: req.params.postID,
+      },
+    });
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found." });
+    }
+
+    if (!req.body.body) {
+      return res.status(404).json({ message: "Comment body not provided." });
+    }
+
+    const comment = await Comments.create({
+      body: req.body.body,
+      userID: req.userID,
+      postID: req.params.postID,
+    });
+
+    if (!comment) {
+      return res
+        .status(400)
+        .json({ message: "Could not comment on the post." });
+    }
+
+    return res.status(200).json({ message: "Post comment success." });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Internal Server Error." });
+  }
+};
+
 module.exports = {
   createPost,
   getAllPosts,
@@ -132,4 +168,5 @@ module.exports = {
   getPostDetails,
   deletePost,
   likePost,
+  commentPost,
 };
