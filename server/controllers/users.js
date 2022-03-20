@@ -54,9 +54,11 @@ const createFriendRequest = async (req, res) => {
   if (!status) {
     status = 0;
   }
-  
-  if(req.userID == req.body.receiverID){
-    return res.status(400).json({ message: "Receiver and sender cannot be same." }); 
+
+  if (req.userID == req.body.receiverID) {
+    return res
+      .status(400)
+      .json({ message: "Receiver and sender cannot be same." });
   }
 
   try {
@@ -87,4 +89,34 @@ const createFriendRequest = async (req, res) => {
   }
 };
 
-module.exports = { getUserDetails, updateUserDetails, createFriendRequest };
+const updateFriendRequest = async (req, res) => {
+  if (!req.body.status) {
+    return res.status(400).json({ message: "Status not provided." });
+  }
+  try {
+    const request = await Friendships.findOne({
+      where: {
+        friendshipID: req.params.requestID,
+      },
+    });
+
+    if (!request) {
+      return res.status(404).json({ message: "Request not found." });
+    }
+
+    request.status = req.body.status;
+    await request.save();
+
+    return res.status(200).json({ message: "Request updated success." });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Internal Server Error!" });
+  }
+};
+
+module.exports = {
+  getUserDetails,
+  updateUserDetails,
+  createFriendRequest,
+  updateFriendRequest,
+};

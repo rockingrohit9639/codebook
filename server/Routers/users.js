@@ -3,6 +3,7 @@ const {
   getUserDetails,
   updateUserDetails,
   createFriendRequest,
+  updateFriendRequest,
 } = require("../controllers/users");
 
 const router = require("express").Router();
@@ -12,5 +13,6 @@ router.put("/update/:userid", verifyToken, updateUserDetails);
 
 // Friends
 router.post("/friendRequest", verifyToken, createFriendRequest);
+router.put("/friendRequest/:requestID", verifyToken, updateFriendRequest);
 
 module.exports = router;
