@@ -2,6 +2,7 @@ const db = require("../db/connection");
 const Posts = db.posts;
 const Likes = db.likes;
 const Comments = db.comments;
+const Users = db.users;
 
 const createPost = async (req, res) => {
   if (!req.body.imgURL) {
@@ -161,6 +162,37 @@ const commentPost = async (req, res) => {
   }
 };
 
+const deleteComment = async (req, res) => {
+  try {
+    const user = await Users.findOne({
+      where: {
+        userID: req.userID
+      }
+    });
+
+    const comment = await Comments.findOne({
+      where: {
+        commentID: req.params.commentID,
+      },
+    });
+
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found." });
+    }
+
+    if(user.dataValues.userID === comment.dataValues.userID){
+      await comment.destroy();
+      return res.status(200).json({ message: "Comment delete success." });
+    }
+    else {
+      return res.status(403).json({ message: "You are not authorized." });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Internal Server Error." });
+  }
+};
+
 module.exports = {
   createPost,
   getAllPosts,
@@ -169,4 +201,5 @@ module.exports = {
   deletePost,
   likePost,
   commentPost,
+  deleteComment,
 };
