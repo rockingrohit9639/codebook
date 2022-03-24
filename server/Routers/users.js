@@ -11,8 +11,4 @@ const router = require("express").Router();
 router.get("/details/:userid", getUserDetails);
 router.put("/update/:userid", verifyToken, updateUserDetails);
 
-// Friends
-router.post("/friendRequest", verifyToken, createFriendRequest);
-router.put("/friendRequest/:requestID", verifyToken, updateFriendRequest);
-
 module.exports = router;
