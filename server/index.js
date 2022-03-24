@@ -24,6 +24,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", require("./Routers/auth"));
 app.use("/api/users", require("./Routers/users"));
 app.use("/api/posts", require("./Routers/posts"));
+app.use("/api/friends", require("./Routers/friends"));
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

@@ -3,7 +3,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = new Sequelize("codebook", "root", "", {
   host: "",
   dialect: "mysql",
-  logging: false
+  logging: false,
 });
 
 sequelize
@@ -14,7 +14,7 @@ sequelize
 const forceSync = async () => {
   try {
     await sequelize.query("SET FOREIGN_KEY_CHECKS = 0");
-    await sequelize.sync({ force: false });
+    await sequelize.sync({ alter: true });
     await sequelize.query("SET FOREIGN_KEY_CHECKS = 1");
   } catch (err) {
     console.log(err);
@@ -48,6 +48,16 @@ db.users.belongsToMany(db.users, {
   as: "sender",
   foreignKey: "senderID",
   through: "friendship",
+});
+
+db.friendships.belongsTo(db.users, {
+  as: "receiver",
+  foreignKey: "receiverID",
+});
+
+db.friendships.belongsTo(db.users, {
+  as: "sender",
+  foreignKey: "senderID",
 });
 // ---------- USER AND FRIENDSHIPS RELATIONSHIP END----------
 
