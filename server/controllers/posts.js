@@ -229,6 +229,24 @@ const getComments = async (req, res) => {
   }
 };
 
+const getLikes = async (req, res) => {
+  try {
+    const allLikes = await Likes.findAll({
+      include: [
+        {
+          model: Users,
+          attributes: ["userID", "username", "photoURL"],
+        },
+      ],
+    });
+
+    return res.status(200).json(allLikes);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Internal Server Error." });
+  }
+};
+
 module.exports = {
   createPost,
   getAllPosts,
@@ -239,4 +257,5 @@ module.exports = {
   commentPost,
   deleteComment,
   getComments,
+  getLikes,
 };

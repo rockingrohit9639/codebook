@@ -8,6 +8,7 @@ const {
   commentPost,
   deleteComment,
   getComments,
+  getLikes,
 } = require("../controllers/posts");
 const verifyToken = require("../middlewares/verifyToken");
 
@@ -22,5 +23,6 @@ router.post("/like/:postID", verifyToken, likePost);
 router.post("/comment/:postID", verifyToken, commentPost);
 router.delete("/comment/delete/:commentID", verifyToken, deleteComment);
 router.get("/comments/:postID", verifyToken, getComments);
+router.get("/likes", verifyToken, getLikes);
 
 module.exports = router;
