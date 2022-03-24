@@ -29,7 +29,14 @@ const createPost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
   try {
-    const allPosts = await Posts.findAll();
+    const allPosts = await Posts.findAll({
+      include: [
+        {
+          model: Users,
+          attributes: ["userID", "username", "photoURL"],
+        },
+      ],
+    });
 
     return res.status(200).json(allPosts);
   } catch (err) {
@@ -59,6 +66,12 @@ const getPostDetails = async (req, res) => {
       where: {
         postID: req.params.postID,
       },
+      include: [
+        {
+          model: Users,
+          attributes: ["userID", "username", "photoURL"],
+        },
+      ],
     });
 
     if (!postDetails) {
@@ -166,8 +179,8 @@ const deleteComment = async (req, res) => {
   try {
     const user = await Users.findOne({
       where: {
-        userID: req.userID
-      }
+        userID: req.userID,
+      },
     });
 
     const comment = await Comments.findOne({
@@ -180,11 +193,10 @@ const deleteComment = async (req, res) => {
       return res.status(404).json({ message: "Comment not found." });
     }
 
-    if(user.dataValues.userID === comment.dataValues.userID){
+    if (user.dataValues.userID === comment.dataValues.userID) {
       await comment.destroy();
       return res.status(200).json({ message: "Comment delete success." });
-    }
-    else {
+    } else {
       return res.status(403).json({ message: "You are not authorized." });
     }
   } catch (err) {
