@@ -205,6 +205,30 @@ const deleteComment = async (req, res) => {
   }
 };
 
+const getComments = async (req, res) => {
+  if (!req.params.postID) {
+    return res.status(400).json({ message: "postID not provided!" });
+  }
+  try {
+    const comments = await Comments.findAll({
+      where: {
+        postID: req.params.postID,
+      },
+      include: [
+        {
+          model: Users,
+          attributes: ["userID", "username", "photoURL"],
+        },
+      ],
+    });
+
+    return res.status(200).json(comments);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Internal Server Error." });
+  }
+};
+
 module.exports = {
   createPost,
   getAllPosts,
@@ -214,4 +238,5 @@ module.exports = {
   likePost,
   commentPost,
   deleteComment,
+  getComments,
 };
