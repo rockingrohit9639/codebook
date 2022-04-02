@@ -89,15 +89,27 @@ const getAllFriends = async (req, res) => {
         {
           model: Users,
           as: "receiver",
+          attributes: ["userID", "username", "photoURL"],
         },
         {
           model: Users,
           as: "sender",
+          attributes: ["userID", "username", "photoURL"],
         },
       ],
     });
 
-    return res.json(allFriends);
+    const friends = [];
+
+    for (let fr of allFriends) {
+      if (fr.dataValues.receiver.dataValues.userID == req.userID) {
+        friends.push(fr.dataValues.sender.dataValues);
+      } else {
+        friends.push(fr.dataValues.receiver.dataValues);
+      }
+    }
+
+    return res.status(200).json(friends);
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Internal Server Error!" });
