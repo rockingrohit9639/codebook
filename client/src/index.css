@@ -6,7 +6,15 @@
   box-sizing: border-box;
 }
 
+:root {
+  --primary-color: #5701ff;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   background: #F3F5F8;
+}
+
+a {
+  text-decoration: none;
 }
