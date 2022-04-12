@@ -3,6 +3,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ChatIcon from "@mui/icons-material/Chat";
 import Avatar from "@mui/material/Avatar";
+import { Link } from "react-router-dom";
 
 const NavbarContainer = styled.div`
   width: 100%;
@@ -29,7 +30,9 @@ const Left = styled.div`
 const Span = styled.span`
   color: #5701ff;
 `;
-const Name = styled.p``;
+const Name = styled(Link)`
+  color: #000;
+`;
 
 const Center = styled.form`
   width: 50%;
@@ -74,7 +77,7 @@ function Navbar() {
   return (
     <NavbarContainer>
       <Left>
-        <Name>
+        <Name to={"/"}>
           <Span>C</Span>odebook
         </Name>
       </Left>
