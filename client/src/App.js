@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Login from "./Components/Login/Login";
 import Navbar from "./Components/Navbar/Navbar";
 import Post from "./Components/Posts/Post";
+import Signup from "./Components/Signup/Signup";
 
 function App() {
   return (
@@ -10,7 +11,8 @@ function App() {
       <Router>
         <Navbar />
         {/* <Post /> */}
-        <Login />
+        {/* <Login /> */}
+        <Signup />
       </Router>
      
     </div>

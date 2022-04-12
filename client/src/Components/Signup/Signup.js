@@ -16,7 +16,7 @@ const Container = styled.div`
   }
 `;
 
-const LoginContainer = styled.form`
+const SignupContainer = styled.form`
   background: #fff;
   padding: 2rem;
   border-radius: 10px;
@@ -65,7 +65,7 @@ const ButtonContainer = styled.div`
     margin-bottom: 1rem;
 `;
 
-const LoginButton = styled.button`
+const SignupButton = styled.button`
     border: none;
     outline: none;
     font-size: 1rem;
@@ -77,7 +77,7 @@ const LoginButton = styled.button`
     cursor: pointer;
 `;
 
-const SocialLogin = styled.div``;
+const SocialSignup = styled.div``;
 
 const Foot = styled.p`
     font-size: 0.8rem;
@@ -88,17 +88,18 @@ const SignupPage = styled(Link)`
     color: var(--primary-color);
 `;
 
-// const SignupPage = styled.a`
-  /* color: var(--primary-color);
-`; */
-
-function Login() {
+function Signup() {
   return (
     <Container>
-      <LoginContainer>
+      <SignupContainer>
         <Heading>
-          Welcome to <Span>C</Span>odebook.
+          Register on <Span>C</Span>odebook.
         </Heading>
+
+        <InputBox>
+          <Label>Full Name</Label>
+          <Input type={"text"} placeholder="e.g. John Doe" />
+        </InputBox>
 
         <InputBox>
           <Label>Username</Label>
@@ -111,20 +112,20 @@ function Login() {
         </InputBox>
 
         <ButtonContainer>
-          <LoginButton>Login</LoginButton>
+          <SignupButton>Sign Up</SignupButton>
 
-          <SocialLogin>
+          <SocialSignup>
             <GoogleIcon />
             <FacebookIcon />
-          </SocialLogin>
+          </SocialSignup>
         </ButtonContainer>
 
         <Foot>
-          Did not have an account? <SignupPage to={"/singup"}>Signup</SignupPage>
+          Already have an account? <SignupPage to={"/login"}>Login</SignupPage>
         </Foot>
-      </LoginContainer>
+      </SignupContainer>
     </Container>
   );
 }
 
-export default Login;
+export default Signup;
