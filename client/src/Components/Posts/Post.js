@@ -8,7 +8,7 @@ import CommentIcon from "@mui/icons-material/Comment";
 import ShareIcon from "@mui/icons-material/Share";
 
 const PostContainer = styled.div`
-  max-width: 60%;
+  max-width: 100%;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0px 7px 10px -10px rgba(0, 0, 0, 0.2);

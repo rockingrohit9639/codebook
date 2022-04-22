@@ -17,6 +17,7 @@ const NavbarContainer = styled.div`
   position: sticky;
   top: 0;
   left: 0;
+  z-index: 100;
   @media only screen and (max-width: 680px) {
     padding: 0 clamp(1rem, 12vw, 2rem);
   }
@@ -35,7 +36,7 @@ const Name = styled(Link)`
 `;
 
 const Center = styled.form`
-  width: 50%;
+  width: 50%; 
   background: #f3f5f8;
   border-radius: 50px;
   padding: 0.4rem 1rem;
