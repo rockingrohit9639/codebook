@@ -1,54 +1,60 @@
 import React, { useState } from "react";
 import { ColorExtractor } from "react-color-extractor";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
+// import { Link } from "react-router-dom";
+import styledComponents from "styled-components";
 import Post from "../Posts/Post";
 import Modal from "@mui/material/Modal";
 import { Button } from "../Basic/Basic";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import { styled } from "@mui/material/styles";
+import TabPanel from "@mui/lab/TabPanel";
+import TabContext from "@mui/lab/TabContext";
+import Friend from "../Friend/Friend";
 
-const ProfileComponent = styled.div``;
+const ProfileComponent = styledComponents.div``;
 
-const ProfileBg = styled.div`
+const ProfileBg = styledComponents.div`
   width: 100%;
   height: 20vh;
   background-color: ${(props) => props.bgColor};
 `;
 
-const ProfileInfo = styled.div`
+const ProfileInfo = styledComponents.div`
   padding: 1rem clamp(2rem, 12vw, 6rem);
   display: flex;
   justify-content: space-between;
 `;
 
-const ProfileInfoLeft = styled.div`
+const ProfileInfoLeft = styledComponents.div`
   height: 15rem;
   transform: translateY(-40%);
   flex: 30%;
 `;
 
-const ProfileInfoCenter = styled.div`
+const ProfileInfoCenter = styledComponents.div`
   flex: 50%;
 `;
 
-const ProfileInfoRight = styled.div`
+const ProfileInfoRight = styledComponents.div`
   flex: 20%;
 `;
 
-const ProfileName = styled.h2`
+const ProfileName = styledComponents.h2`
   font-size: 1.5rem;
 `;
 
-const ProfileEmail = styled.p`
+const ProfileEmail = styledComponents.p`
   font-size: 1rem;
   color: #939393;
   line-height: 2.5rem;
 `;
 
-const ProfileBio = styled.p``;
+const ProfileBio = styledComponents.p``;
 
-const ProfileImageBox = styled.div``;
+const ProfileImageBox = styledComponents.div``;
 
-const TabsBox = styled.div`
+const TabsBox = styledComponents.div`
   width: 100%;
   background-color: #fff;
   padding: 1rem clamp(2rem, 12vw, 6rem);
@@ -57,19 +63,22 @@ const TabsBox = styled.div`
   gap: 1rem;
 `;
 
-const Tab = styled(Link)`
-  color: #fff;
-  background-color: var(--primary-color);
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-`;
+// const StyledTab = styledComponents(Tabs)`
+//   color: #000;
+//   padding: 0.5rem 1rem;
+//   border-radius: 5px;
+//   &.active {
+//     color: #fff;
+//     background-color: var(--primary-color);
+//   }
+// `;
 
-const ProfileDetails = styled.div`
+const ProfileDetails = styledComponents.div`
   display: flex;
   padding: 1rem clamp(2rem, 12vw, 6rem);
 `;
 
-const ProfileDetailsLeft = styled.div`
+const ProfileDetailsLeft = styledComponents.div`
   flex: 30%;
   padding: 2rem;
   background-color: #fff;
@@ -77,19 +86,19 @@ const ProfileDetailsLeft = styled.div`
   box-shadow: 10px 12px 15px -10px rgba(0, 0, 0, 0.2);
 `;
 
-const AboutTitle = styled.h1``;
+const AboutTitle = styledComponents.h1``;
 
-const Row = styled.div`
+const Row = styledComponents.div`
   margin-block: 1rem;
   display: flex;
   justify-content: space-between;
 `;
 
-const RowHead = styled.h3``;
+const RowHead = styledComponents.h3``;
 
-const RowItem = styled.p``;
+const RowItem = styledComponents.p``;
 
-const FriendRequestButton = styled.button`
+const FriendRequestButton = styledComponents.button`
   width: 100%;
   margin-top: 1rem;
   border: none;
@@ -99,11 +108,11 @@ const FriendRequestButton = styled.button`
   cursor: pointer;
 `;
 
-const ProfileDetailsRight = styled.div`
+const ProfileDetailsRight = styledComponents.div`
   flex: 70%;
 `;
 
-const ModalBox = styled.div`
+const ModalBox = styledComponents.div`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -114,7 +123,7 @@ const ModalBox = styled.div`
   width: 50%;
 `;
 
-const Input = styled.input`
+const Input = styledComponents.input`
   border: none;
   outline: none;
   padding: 0.5rem 0.8rem;
@@ -123,7 +132,7 @@ const Input = styled.input`
   font-size: 1rem;
 `;
 
-const TextArea = styled.textarea`
+const TextArea = styledComponents.textarea`
   border: none;
   outline: none;
   padding: 0.5rem 0.8rem;
@@ -132,11 +141,55 @@ const TextArea = styled.textarea`
   font-size: 1rem;
 `;
 
-const ModalButton = styled.button``;
+const StyledTabs = styled((props) => (
+  <Tabs
+    {...props}
+    TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
+  />
+))({
+  "& .MuiTabs-indicator": {
+    display: "flex",
+    justifyContent: "center",
+    backgroundColor: "transparent",
+  },
+  "& .MuiTabs-indicatorSpan": {
+    maxWidth: 40,
+    width: "100%",
+  },
+});
+
+const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
+  ({ theme }) => ({
+    color: "#000",
+    borderRadius: "5px",
+    "&.Mui-selected": {
+      color: "#fff",
+      backgroundColor: "#5701ff",
+    },
+  })
+);
+
+const Friends = styledComponents.div`
+  margin: 1rem clamp(2rem, 12vw, 6rem);
+  background: #FFF;
+  padding: 2rem;
+  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+`;
+
+
 
 function Profile() {
   const [bgColor, setBgColor] = useState("");
   const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("one");
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   const getColors = (colors) => {
     setBgColor(colors[Math.floor(Math.random() * colors.length)]);
@@ -219,36 +272,60 @@ function Profile() {
         </ModalBox>
       </Modal>
 
-      <TabsBox>
-        <Tab to={"/profile"}>About</Tab>
-        <Tab to={"/friends"}>Friends</Tab>
-      </TabsBox>
+      <TabContext value={value}>
+        <TabsBox>
+          <StyledTabs
+            value={value}
+            onChange={handleChange}
+            aria-label="styled tabs example"
+          >
+            <StyledTab label="About" value={"one"} />
+            <StyledTab label="Friends" value={"two"} />
+          </StyledTabs>
+        </TabsBox>
 
-      <ProfileDetails>
-        <ProfileDetailsLeft>
-          <AboutTitle>About</AboutTitle>
-          <hr />
-          <Row>
-            <RowHead>DOB</RowHead>
-            <RowItem>24/02/2001</RowItem>
-          </Row>
+        <TabPanel value={"one"}>
+          <ProfileDetails>
+            <ProfileDetailsLeft>
+              <AboutTitle>About</AboutTitle>
+              <hr />
+              <Row>
+                <RowHead>DOB</RowHead>
+                <RowItem>24/02/2001</RowItem>
+              </Row>
 
-          <Row>
-            <RowHead>Gender</RowHead>
-            <RowItem>Male</RowItem>
-          </Row>
+              <Row>
+                <RowHead>Gender</RowHead>
+                <RowItem>Male</RowItem>
+              </Row>
 
-          <Row>
-            <RowHead>Friends</RowHead>
-            <RowItem>50</RowItem>
-          </Row>
+              <Row>
+                <RowHead>Friends</RowHead>
+                <RowItem>50</RowItem>
+              </Row>
 
-          <FriendRequestButton>Friend Requests</FriendRequestButton>
-        </ProfileDetailsLeft>
-        <ProfileDetailsRight>
-          <Post />
-        </ProfileDetailsRight>
-      </ProfileDetails>
+              <FriendRequestButton>Friend Requests</FriendRequestButton>
+            </ProfileDetailsLeft>
+            <ProfileDetailsRight>
+              <Post />
+            </ProfileDetailsRight>
+          </ProfileDetails>
+        </TabPanel>
+
+        <TabPanel value="two">
+          <Friends>
+            <Friend />
+            <Friend />
+            <Friend />
+            <Friend />
+            <Friend />
+            <Friend />
+            <Friend />
+            <Friend />
+            <Friend />
+          </Friends>
+        </TabPanel>
+      </TabContext>
     </ProfileComponent>
   );
 }
