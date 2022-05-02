@@ -28,7 +28,7 @@ const register = async (req, res) => {
   } catch (e) {
     console.log(e);
     if (e.errors) {
-      return res.status(401).json({ message: e.errors[0].original });
+      return res.status(400).json({ message: e.errors[0].original });
     } else {
       return res.status(500).json({ message: "Internal Server Error!" });
     }

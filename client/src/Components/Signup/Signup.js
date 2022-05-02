@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import GoogleIcon from '@mui/icons-material/Google';
-import FacebookIcon from '@mui/icons-material/Facebook';
+import { Link, useNavigate } from "react-router-dom";
+import GoogleIcon from "@mui/icons-material/Google";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import server from "../../axios/instance";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Container = styled.div`
   width: 100%;
@@ -28,87 +31,162 @@ const SignupContainer = styled.form`
 `;
 
 const Heading = styled.h1`
-    font-size: 2rem;
-    font-weight: 600;
+  font-size: 2rem;
+  font-weight: 600;
 `;
 
 const Span = styled.span`
-    color: var(--primary-color);
-    margin-bottom: 1rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
 `;
 
 const InputBox = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin-block: 1rem;
+  display: flex;
+  flex-direction: column;
+  margin-block: 1rem;
 `;
 
 const Label = styled.label`
-    font-size: 0.8rem;
-    font-weight: 300;
+  font-size: 0.8rem;
+  font-weight: 300;
 `;
 
 const Input = styled.input`
-    border: none;
-    outline: none;
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    padding: 0.7rem 0.5rem;
-    background:  #EFEFEF;
-    border-radius: 5px;
+  border: none;
+  outline: none;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  padding: 0.7rem 0.5rem;
+  background: #efefef;
+  border-radius: 5px;
 `;
 
 const ButtonContainer = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 `;
 
 const SignupButton = styled.button`
-    border: none;
-    outline: none;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #FFF;
-    background: var(--primary-color);
-    padding: 0.6rem 1.2rem;
-    border-radius: 10px;
-    cursor: pointer;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--primary-color);
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
 `;
 
 const SocialSignup = styled.div``;
 
 const Foot = styled.p`
-    font-size: 0.8rem;
-    font-weight: 300;
+  font-size: 0.8rem;
+  font-weight: 300;
 `;
 
 const SignupPage = styled(Link)`
-    color: var(--primary-color);
+  color: var(--primary-color);
 `;
 
 function Signup() {
+  const [signupData, setSignupData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setSignupData((prevData) => {
+      return {
+        ...prevData,
+        [name]: value,
+      };
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (
+      signupData.email !== "" &&
+      signupData.username !== "" &&
+      signupData.password !== ""
+    ) {
+      try {
+        const res = await server.post("/auth/register", signupData);
+
+        if (res.status === 200) {
+          toast.success(res.data.message);
+          navigate("/login");
+        }
+      } catch (err) {
+        if (err.response) {
+          toast.error(err.response.data.message);
+        } else {
+          toast.error("Something went wrong.");
+        }
+      }
+    }
+  };
+
   return (
     <Container>
-      <SignupContainer>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <SignupContainer onSubmit={handleSubmit}>
         <Heading>
           Register on <Span>C</Span>odebook.
         </Heading>
 
         <InputBox>
-          <Label>Full Name</Label>
-          <Input type={"text"} placeholder="e.g. John Doe" />
+          <Label>Email Address</Label>
+          <Input
+            value={signupData.email}
+            type={"email"}
+            placeholder="e.g. john@gmail.com"
+            name="email"
+            onChange={handleChange}
+            required
+          />
         </InputBox>
 
         <InputBox>
           <Label>Username</Label>
-          <Input type={"text"} placeholder="e.g. _example_404" />
+          <Input
+            value={signupData.uname}
+            type={"text"}
+            placeholder="e.g. _example_4"
+            name="username"
+            onChange={handleChange}
+            required
+          />
         </InputBox>
 
         <InputBox>
           <Label>Password</Label>
-          <Input type={"password"} placeholder="********" />
+          <Input
+            value={signupData.password}
+            type={"password"}
+            placeholder="********"
+            name="password"
+            onChange={handleChange}
+            required
+          />
         </InputBox>
 
         <ButtonContainer>

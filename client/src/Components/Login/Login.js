@@ -120,7 +120,7 @@ function Login() {
         </ButtonContainer>
 
         <Foot>
-          Did not have an account? <SignupPage to={"/singup"}>Signup</SignupPage>
+          Did not have an account? <SignupPage to={"/signup"}>Signup</SignupPage>
         </Foot>
       </LoginContainer>
     </Container>
