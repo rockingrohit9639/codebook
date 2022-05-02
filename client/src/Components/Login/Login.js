@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -6,8 +6,8 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import server from "../../axios/instance";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../redux/userRedux";
+import { useDispatch, useSelector } from "react-redux";
+import { setAuth, setUser } from "../../redux/userRedux";
 
 const Container = styled.div`
   width: 100%;
@@ -102,6 +102,7 @@ function Login() {
     username: "",
     password: "",
   });
+  const { isAuthenticated } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -117,12 +118,18 @@ function Login() {
     });
   };
 
+  useEffect(() => {
+    if (isAuthenticated === true) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (loginData.username !== "" && loginData.password !== "") {
       try {
         const res = await server.post("/auth/login", loginData);
-        console.log(res.data);
+        // console.log(res.data);
         if (res.status === 200) {
           localStorage.setItem("@ttookk", JSON.stringify(res.data.accessToken));
           localStorage.setItem("userID", JSON.stringify(res.data.userID));
@@ -135,6 +142,8 @@ function Login() {
               photoURL: res.data.photoURL,
             })
           );
+
+          dispatch(setAuth(true));
 
           dispatch(
             setUser({

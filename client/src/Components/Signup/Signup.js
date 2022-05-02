@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -6,6 +6,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import server from "../../axios/instance";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   width: 100%;
@@ -97,6 +98,7 @@ function Signup() {
     email: "",
     password: "",
   });
+  const { isAuthenticated } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -134,6 +136,12 @@ function Signup() {
       }
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated === true) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <Container>
