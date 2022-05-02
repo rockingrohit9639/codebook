@@ -1,22 +1,26 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./Components/Login/Login";
 import Navbar from "./Components/Navbar/Navbar";
 import Signup from "./Components/Signup/Signup";
 import Post from "./Components/Posts/Post";
-import { setAuth } from "./redux/userRedux";
+import { setAuth, setUser } from "./redux/userRedux";
+import Logout from "./Logout/Logout";
 
 function App() {
   const dispatch = useDispatch();
+  const token = localStorage.getItem("@ttookk");
 
   useEffect(() => {
-    if (localStorage.getItem("@ttookk") !== "") {
+    if (localStorage.getItem("@ttookk")) {
       dispatch(setAuth(true));
+      dispatch(setUser(JSON.parse(localStorage.getItem("user"))));
     } else {
-      dispatch(setAuth(true));
+      dispatch(setAuth(false));
     }
-  }, [localStorage.getItem("@ttookk"), dispatch]);
+  }, [token, dispatch]);
+
   return (
     <div className="App">
       <Router>
@@ -25,6 +29,7 @@ function App() {
           <Route path="/" element={<Post />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/logout" element={<Logout />} />
           {/* <Post /> */}
           {/* <Profile /> */}
         </Routes>

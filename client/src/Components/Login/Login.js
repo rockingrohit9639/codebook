@@ -126,6 +126,15 @@ function Login() {
         if (res.status === 200) {
           localStorage.setItem("@ttookk", JSON.stringify(res.data.accessToken));
           localStorage.setItem("userID", JSON.stringify(res.data.userID));
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              userID: res.data.userID,
+              username: res.data.username,
+              email: res.data.email,
+              photoURL: res.data.photoURL,
+            })
+          );
 
           dispatch(
             setUser({

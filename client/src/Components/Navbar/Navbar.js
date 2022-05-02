@@ -4,6 +4,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import ChatIcon from "@mui/icons-material/Chat";
 import Avatar from "@mui/material/Avatar";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const NavbarContainer = styled.div`
   width: 100%;
@@ -36,7 +37,7 @@ const Name = styled(Link)`
 `;
 
 const Center = styled.form`
-  width: 50%; 
+  width: 50%;
   background: #f3f5f8;
   border-radius: 50px;
   padding: 0.4rem 1rem;
@@ -74,7 +75,18 @@ const Right = styled.div`
   gap: 1rem;
 `;
 
+const LinkBox = styled(Link)`
+  color: #000;
+  &:hover {
+    color: var(--primary-color);
+  }
+`;
+
 function Navbar() {
+  const { isAuthenticated, username, photoURL } = useSelector(
+    (state) => state.user
+  );
+
   return (
     <NavbarContainer>
       <Left>
@@ -91,17 +103,22 @@ function Navbar() {
         </SearchBox>
       </Center>
 
-      <Right>
-        <SearchIconBox>
-          <SearchIcon />
-        </SearchIconBox>
-        <NotificationsIcon style={{ cursor: "pointer" }} />
-        <ChatIcon style={{ cursor: "pointer" }} />
-        <Avatar
-          alt="Rohit Saini"
-          src="https://www.indiewire.com/wp-content/uploads/2021/06/MCDAVAT_FE094.jpg?resize=960,540"
-        />
-      </Right>
+      {isAuthenticated ? (
+        <Right>
+          <SearchIconBox>
+            <SearchIcon />
+          </SearchIconBox>
+          <NotificationsIcon style={{ cursor: "pointer" }} />
+          <ChatIcon style={{ cursor: "pointer" }} />
+          <Avatar alt={username} src={photoURL} />
+          <LinkBox to="/logout">Logout</LinkBox>
+        </Right>
+      ) : (
+        <Right>
+          <LinkBox to="/login">Login</LinkBox>
+          <LinkBox to="/signup">Sign Up</LinkBox>
+        </Right>
+      )}
     </NavbarContainer>
   );
 }
