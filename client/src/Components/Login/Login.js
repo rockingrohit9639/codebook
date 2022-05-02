@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import server from "../../axios/instance";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/userRedux";
 
 const Container = styled.div`
   width: 100%;
@@ -101,6 +103,9 @@ function Login() {
     password: "",
   });
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -117,13 +122,35 @@ function Login() {
     if (loginData.username !== "" && loginData.password !== "") {
       try {
         const res = await server.post("/auth/login", loginData);
-
         console.log(res.data);
-      } catch (err) {
-        if(err.response){
-          toast.error(err.response.data.message);
+        if (res.status === 200) {
+          localStorage.setItem("@ttookk", JSON.stringify(res.data.accessToken));
+          localStorage.setItem("userID", JSON.stringify(res.data.userID));
+
+          dispatch(
+            setUser({
+              userID: res.data.userID,
+              username: res.data.username,
+              email: res.data.email,
+              photoURL: res.data.photoURL,
+            })
+          );
+
+          server.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${res.data.accessToken}`;
+
+          setLoginData({
+            username: "",
+            password: "",
+          });
+
+          navigate("/");
         }
-        else {
+      } catch (err) {
+        if (err.response) {
+          toast.error(err.response.data.message);
+        } else {
           toast.error("Something went wrong!");
         }
       }
