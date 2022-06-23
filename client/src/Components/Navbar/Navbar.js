@@ -83,9 +83,8 @@ const LinkBox = styled(Link)`
 `;
 
 function Navbar() {
-  const { isAuthenticated, username, photoURL } = useSelector(
-    (state) => state.user
-  );
+  const isAuthenticated = useSelector((state) => state.isAuthenticated);
+  const user = useSelector((state) => state.user);
 
   return (
     <NavbarContainer>
@@ -110,7 +109,7 @@ function Navbar() {
           </SearchIconBox>
           <NotificationsIcon style={{ cursor: "pointer" }} />
           <ChatIcon style={{ cursor: "pointer" }} />
-          <Avatar alt={username} src={photoURL} />
+          <Avatar alt={user.username} src={user.photoURL} />
           <LinkBox to="/logout">Logout</LinkBox>
         </Right>
       ) : (
