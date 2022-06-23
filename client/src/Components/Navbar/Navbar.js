@@ -83,7 +83,7 @@ const LinkBox = styled(Link)`
 `;
 
 function Navbar() {
-  const isAuthenticated = useSelector((state) => state.isAuthenticated);
+  const { isAuthenticated } = useSelector((state) => state.user);
   const user = useSelector((state) => state.user);
 
   return (
