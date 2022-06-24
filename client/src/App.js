@@ -9,6 +9,7 @@ import { setAuth, setUser } from "./redux/userRedux";
 import Logout from "./Logout/Logout";
 import Profile from "./Components/Profile/Profile";
 import CreatePost from "./Components/CreatePost/CreatePost";
+import server from "./axios/instance";
 
 function App() {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ function App() {
     if (localStorage.getItem("@ttookk")) {
       dispatch(setAuth(true));
       dispatch(setUser(JSON.parse(localStorage.getItem("user"))));
+      server.defaults.headers["token"] = `Bearer ${JSON.parse(token)}`;
     } else {
       dispatch(setAuth(false));
     }
@@ -34,9 +36,6 @@ function App() {
           <Route path="/logout" element={<Logout />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/create-post" element={<CreatePost />} />
-
-          {/* <Post /> */}
-          {/* <Profile /> */}
         </Routes>
       </Router>
     </div>

@@ -45,17 +45,22 @@ import "codemirror/mode/sql/sql";
 import "codemirror/mode/markdown/markdown";
 // Importing Languages
 
+// Material UI Imports
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LanguageIcon from "@mui/icons-material/Language";
+import UploadIcon from "@mui/icons-material/Upload";
 import Tooltip from "@mui/material/Tooltip";
-import Dropdown from "../Dropdown/Dropdown";
+// Material UI Imports
 
+import Dropdown from "../Dropdown/Dropdown";
 import { THEMES, LANGUAGES, defaultCode } from "../../utils/constants";
 import { componentToImage } from "../../utils/componentToImage";
 import { handleUpload } from "../../utils/handleUpload";
 
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import server from "../../axios/instance";
 
 const Container = styled.div`
   width: 100%;
@@ -129,7 +134,6 @@ const SelectBgColor = styled.input`
 
 const InputBox = styled.div`
   width: clamp(5rem, 90vw, 70rem);
-  height: 6rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -144,11 +148,22 @@ const Input = styled.input`
   width: 100%;
   height: 100%;
   padding-left: 1rem;
+  padding-block: 1rem;
   font-size: 1rem;
   background: transparent;
 `;
 
-const SubmitButton = styled.button``;
+const SubmitButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 1rem;
+  background-color: #fff;
+  border: 1px solid var(--primary-color);
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 2px 4px 10px -2px rgba(0, 0, 0, 0.2);
+`;
 
 function CreatePost() {
   // TODO: Show number of line
@@ -162,9 +177,37 @@ function CreatePost() {
   const navigate = useNavigate();
 
   const handlePostSubmit = async () => {
-    const image = await componentToImage(postRef.current);
-    const imageURL = await handleUpload(image, user.username);
-    console.log(imageURL);
+    if (!postTitle || !editorValue) {
+      toast.error("Please fill all the fields");
+      return;
+    }
+
+    try {
+      // Getting base64 encoded image
+      const image = await componentToImage(postRef.current);
+
+      // Uploading image to firebase storage
+      const imgURL = await handleUpload(image, user.username);
+      const data = {
+        postTitle,
+        imgURL,
+      };
+
+      // Addind post data on server
+      const res = await server.post("/posts/create", data);
+
+      if (res.status === 200) {
+        toast.success("Post created successfully");
+        setPostTitle("");
+        setEditorValue(defaultCode);
+        navigate("/");
+      }
+    } catch (err) {
+      if (err.response) {
+        toast.error(err.response.data.message);
+      }
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -177,6 +220,17 @@ function CreatePost() {
 
   return (
     <Container>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <InputBox>
         <Input
           type={"text"}
@@ -216,7 +270,18 @@ function CreatePost() {
           />
         </Tooltip>
 
-        <SubmitButton onClick={handlePostSubmit}>Post</SubmitButton>
+        <SubmitButton onClick={handlePostSubmit}>
+          <p
+            style={{
+              fontSize: "1rem",
+              color: "var(--primary-color)",
+              fontWeight: "bold",
+            }}
+          >
+            Post
+          </p>
+          <UploadIcon style={{ color: "var(--primary-color)" }} />
+        </SubmitButton>
       </Menu>
 
       <CodeWrapper>
