@@ -110,14 +110,37 @@ const MenuIcons = styled.img`
 `;
 
 const SelectBgColor = styled.input`
-  height: 3.4rem;
+  height: 3.7rem;
+  width: 3.7rem;
   border: none;
   outline: none;
   cursor: pointer;
 
   &::-webkit-color-swatch {
     border: none;
+    border-radius: 5px;
   }
+`;
+
+const InputBox = styled.div`
+  width: clamp(5rem, 90vw, 70rem);
+  height: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 2px 4px 10px -5px rgba(0, 0, 0, 0.1);
+`;
+
+const Input = styled.input`
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  padding-left: 1rem;
+  font-size: 1rem;
+  background: transparent;
 `;
 
 function CreatePost() {
@@ -136,6 +159,10 @@ console.log(message);
 
   return (
     <Container>
+      <InputBox>
+        <Input type={"text"} placeholder="Enter post title..." />
+      </InputBox>
+
       <Menu>
         <MenuOption>
           <DarkModeIcon />
@@ -159,14 +186,12 @@ console.log(message);
           />
         </MenuOption>
 
-        <MenuOption>
-          <Tooltip title="Change Background Color">
-            <SelectBgColor
-              type={"color"}
-              onChange={(e) => setBgColor(e.target.value)}
-            />
-          </Tooltip>
-        </MenuOption>
+        <Tooltip title="Change Background Color">
+          <SelectBgColor
+            type={"color"}
+            onChange={(e) => setBgColor(e.target.value)}
+          />
+        </Tooltip>
       </Menu>
 
       <CodeWrapper>
