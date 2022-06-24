@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import server from "../../axios/instance";
-import { Mt } from "../Basic/Basic";
 import Post from "../Posts/Post";
 
 const Container = styled.div`
