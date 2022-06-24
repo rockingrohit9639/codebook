@@ -8,10 +8,13 @@ const createPost = async (req, res) => {
   if (!req.body.imgURL) {
     return res.status(403).json({ message: "Image URL is required." });
   }
+
+  if (!req.body.postTitle) {
+    return res.status(403).json({ message: "Post title is required." });
+  }
   try {
     const post = await Posts.create({
-      postTitle: req.body.postTitle !== undefined ? req.body.postTitle : null,
-      // codeSnippet: req.body.codeSnippet || "console.log('No code snippet')",
+      postTitle: req.body.postTitle,
       imgURL: req.body.imgURL,
       userID: req.userID,
     });
