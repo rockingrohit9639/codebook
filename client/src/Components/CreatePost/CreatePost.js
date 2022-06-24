@@ -47,6 +47,7 @@ import "codemirror/mode/markdown/markdown";
 
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LanguageIcon from "@mui/icons-material/Language";
+import Tooltip from "@mui/material/Tooltip";
 import Dropdown from "../Dropdown/Dropdown";
 
 import { THEMES, LANGUAGES } from "../../utils/constants";
@@ -96,7 +97,7 @@ const CodeWrapper = styled.div`
 const CodeOverlay = styled.div`
   width: max-content;
   max-width: 100%;
-  background-color: red;
+  background-color: ${(props) => props.bgColor || "red"};
   padding: 2rem;
   position: relative;
 `;
@@ -108,18 +109,30 @@ const MenuIcons = styled.img`
   z-index: 10;
 `;
 
+const SelectBgColor = styled.input`
+  height: 3.4rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  &::-webkit-color-swatch {
+    border: none;
+  }
+`;
+
 function CreatePost() {
   // TODO: Show number of line
 
   const [editorValue, setEditorValue] = useState(
     `
-let message = 'I love javascript';
+let message = 'I love javascript';  
 console.log(message);
     `
   );
 
   const [theme, setTheme] = useState("material");
   const [language, setLanguage] = useState("javascript");
+  const [bgColor, setBgColor] = useState("#f8e71d");
 
   return (
     <Container>
@@ -145,10 +158,19 @@ console.log(message);
             valueKey="mode"
           />
         </MenuOption>
+
+        <MenuOption>
+          <Tooltip title="Change Background Color">
+            <SelectBgColor
+              type={"color"}
+              onChange={(e) => setBgColor(e.target.value)}
+            />
+          </Tooltip>
+        </MenuOption>
       </Menu>
 
       <CodeWrapper>
-        <CodeOverlay>
+        <CodeOverlay bgColor={bgColor}>
           <MenuIcons src="/assets/menu-buttons.svg" />
 
           <CodeMirror
