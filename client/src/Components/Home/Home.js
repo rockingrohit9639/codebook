@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import server from "../../axios/instance";
 import { Mt } from "../Basic/Basic";
 import Post from "../Posts/Post";
 
@@ -37,11 +39,28 @@ const AddPostButton = styled.button`
 `;
 
 function Home() {
+  const [allPosts, setAllPosts] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const getAllPosts = async () => {
+      const res = await server.get("/posts/getAllPosts");
+      setAllPosts(res.data);
+    };
+
+    getAllPosts();
+  }, []);
+
   return (
     <Container>
       <HomeLeft>
-        <AddPostButton>Add New Post</AddPostButton>
-        <Post />
+        <AddPostButton onClick={() => navigate("/create-post")}>
+          Add New Code
+        </AddPostButton>
+
+        {allPosts.map((post, index) => (
+          <Post key={index} post={post} />
+        ))}
       </HomeLeft>
       <HomeRight>right</HomeRight>
     </Container>

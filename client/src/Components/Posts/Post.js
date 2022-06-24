@@ -5,6 +5,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import CommentIcon from "@mui/icons-material/Comment";
 import ShareIcon from "@mui/icons-material/Share";
+import moment from "moment";
 
 const PostContainer = styled.div`
   max-width: 100%;
@@ -55,18 +56,18 @@ const PostBottom = styled.div`
   gap: 1rem;
 `;
 
-function Post() {
+function Post({ post }) {
   return (
     <PostContainer>
       <Header>
         <HeaderLeft>
           <Avatar
-            alt="Rohit Saini"
-            src="https://www.indiewire.com/wp-content/uploads/2021/06/MCDAVAT_FE094.jpg?resize=960,540"
+            alt={post.user.username}
+            src={post.user.photoURL !== null ? post.user.photoURL : ""}
           />
           <AuthorContainer>
-            <AuthorName>Rohit Saini</AuthorName>
-            <Time>2 days ago</Time>
+            <AuthorName>{post.user.username}</AuthorName>
+            <Time>{moment(post.createdAt).fromNow()}</Time>
           </AuthorContainer>
         </HeaderLeft>
         <HeaderRight>
@@ -75,10 +76,7 @@ function Post() {
       </Header>
 
       <Content>
-        <Image
-          src="https://code.visualstudio.com/assets/docs/editor/userdefinedsnippets/builtin-javascript-snippets.png"
-          alt="post"
-        />
+        <Image src={post.imgURL} alt="post" />
       </Content>
 
       <PostBottom>

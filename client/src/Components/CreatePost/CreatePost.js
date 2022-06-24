@@ -168,7 +168,7 @@ const SubmitButton = styled.button`
 
 function CreatePost() {
   // TODO: Show number of line
-  
+
   const { isAuthenticated, user } = useSelector((state) => state.user);
 
   // States
@@ -224,9 +224,9 @@ function CreatePost() {
   };
 
   useEffect(() => {
-    // if (!isAuthenticated) {
-    //   return navigate("/login");
-    // }
+    if (!isAuthenticated) {
+      return navigate("/login");
+    }
 
     setEditorValue(defaultCode);
   }, [isAuthenticated, navigate]);
