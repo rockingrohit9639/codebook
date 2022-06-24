@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap");
 
 * {
   margin: 0;
@@ -12,9 +13,27 @@
 
 body {
   font-family: "Poppins", sans-serif;
-  background: #F3F5F8;
+  background: #f3f5f8;
 }
 
 a {
   text-decoration: none;
+}
+
+/* Code Mirror style  */
+.codemirror_wrapper {
+  width: max-content;
+  max-width: 100%;
+}
+
+.CodeMirror {
+  border-radius: 5px;
+  padding: 2rem;
+  font-size: 1rem;
+  font-family: "Fira Code", monospace;
+}
+
+/* Removing style from Material UI Select  */
+.MuiOutlinedInput-notchedOutline {
+  border: 0 !important;
 }

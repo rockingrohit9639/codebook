@@ -1,0 +1,181 @@
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Controlled as CodeMirror } from "react-codemirror2";
+
+// Importing Themes
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/material.css";
+import "codemirror/theme/3024-night.css";
+import "codemirror/theme/abbott.css";
+import "codemirror/theme/abcdef.css";
+import "codemirror/theme/ayu-dark.css";
+import "codemirror/theme/ayu-mirage.css";
+import "codemirror/theme/base16-dark.css";
+import "codemirror/theme/blackboard.css";
+import "codemirror/theme/cobalt.css";
+import "codemirror/theme/colorforth.css";
+import "codemirror/theme/dracula.css";
+import "codemirror/theme/erlang-dark.css";
+import "codemirror/theme/hopscotch.css";
+import "codemirror/theme/isotope.css";
+import "codemirror/theme/mdn-like.css";
+import "codemirror/theme/monokai.css";
+import "codemirror/theme/neo.css";
+import "codemirror/theme/night.css";
+import "codemirror/theme/nord.css";
+// import "codemirror/theme/solarized.css";
+import "codemirror/theme/the-matrix.css";
+import "codemirror/theme/twilight.css";
+import "codemirror/theme/yeti.css";
+// Importing Themes
+
+// Importing Languages
+import "codemirror/mode/xml/xml"; // xml
+import "codemirror/mode/htmlmixed/htmlmixed";
+import "codemirror/mode/css/css";
+import "codemirror/mode/javascript/javascript";
+import "codemirror/mode/python/python";
+import "codemirror/mode/clike/clike";
+import "codemirror/mode/php/php";
+import "codemirror/mode/powershell/powershell";
+import "codemirror/mode/dart/dart";
+import "codemirror/mode/django/django";
+import "codemirror/mode/shell/shell";
+import "codemirror/mode/sql/sql";
+import "codemirror/mode/markdown/markdown";
+// Importing Languages
+
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LanguageIcon from "@mui/icons-material/Language";
+import Dropdown from "../Dropdown/Dropdown";
+
+import { THEMES, LANGUAGES } from "../../utils/constants";
+
+const Container = styled.div`
+  width: 100%;
+  height: calc(100vh - 60px);
+  padding: 1rem clamp(2rem, 12vw, 6rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4rem;
+  @media only screen and (max-width: 680px) {
+    padding: 1rem clamp(1rem, 12vw, 2rem);
+  }
+`;
+
+const Menu = styled.div`
+  width: clamp(5rem, 90vw, 70rem);
+  height: 10px;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+`;
+
+const MenuOption = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.8rem;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 2px 4px 8px 1px rgba(0, 0, 0, 0.08);
+`;
+
+const CodeWrapper = styled.div`
+  width: clamp(5rem, 90vw, 70rem);
+  border: 2px solid #000;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: 2rem;
+`;
+
+const CodeOverlay = styled.div`
+  width: max-content;
+  max-width: 100%;
+  background-color: red;
+  padding: 2rem;
+  position: relative;
+`;
+
+const MenuIcons = styled.img`
+  position: absolute;
+  top: 3rem;
+  left: 3rem;
+  z-index: 10;
+`;
+
+function CreatePost() {
+  // TODO: Show number of line
+
+  const [editorValue, setEditorValue] = useState(
+    `
+let message = 'I love javascript';
+console.log(message);
+    `
+  );
+
+  const [theme, setTheme] = useState("material");
+  const [language, setLanguage] = useState("javascript");
+
+  return (
+    <Container>
+      <Menu>
+        <MenuOption>
+          <DarkModeIcon />
+          <Dropdown
+            list={THEMES}
+            label={"Themes"}
+            value={theme}
+            onChange={(e) => setTheme(e.target.value)}
+            valueKey="id"
+          />
+        </MenuOption>
+
+        <MenuOption>
+          <LanguageIcon />
+          <Dropdown
+            list={LANGUAGES}
+            label={"Languages"}
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            valueKey="mode"
+          />
+        </MenuOption>
+      </Menu>
+
+      <CodeWrapper>
+        <CodeOverlay>
+          <MenuIcons src="/assets/menu-buttons.svg" />
+
+          <CodeMirror
+            className="codemirror_wrapper"
+            value={editorValue}
+            options={{
+              screenReaderLabel: "Code editor",
+              lineNumbers: false,
+              firstLineNumber: 0,
+              mode: language,
+              theme: theme,
+              scrollbarStyle: null,
+              viewportMargin: Infinity,
+              lineWrapping: true,
+              smartIndent: true,
+              readOnly: false,
+              showInvisibles: false,
+              autoCloseBrackets: true,
+            }}
+            onBeforeChange={(editor, data, value) => {
+              setEditorValue(value);
+            }}
+          />
+        </CodeOverlay>
+      </CodeWrapper>
+    </Container>
+  );
+}
+
+export default CreatePost;

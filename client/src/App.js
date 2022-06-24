@@ -7,7 +7,8 @@ import Signup from "./Components/Signup/Signup";
 import Post from "./Components/Posts/Post";
 import { setAuth, setUser } from "./redux/userRedux";
 import Logout from "./Logout/Logout";
-import Profile from "./Components/Profile/Profile"
+import Profile from "./Components/Profile/Profile";
+import CreatePost from "./Components/CreatePost/CreatePost";
 
 function App() {
   const dispatch = useDispatch();
@@ -32,6 +33,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/create-post" element={<CreatePost />} />
 
           {/* <Post /> */}
           {/* <Profile /> */}
