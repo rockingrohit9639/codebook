@@ -1,5 +1,4 @@
 import React from "react";
-import { Container } from "../Basic/Basic";
 import styled from "styled-components";
 import Avatar from "@mui/material/Avatar";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -12,6 +11,7 @@ const PostContainer = styled.div`
   background: #fff;
   border-radius: 10px;
   box-shadow: 0px 7px 10px -10px rgba(0, 0, 0, 0.2);
+  margin-top: 1rem;
 `;
 
 const Header = styled.div`
@@ -57,38 +57,36 @@ const PostBottom = styled.div`
 
 function Post() {
   return (
-    <Container>
-      <PostContainer>
-        <Header>
-          <HeaderLeft>
-            <Avatar
-              alt="Rohit Saini"
-              src="https://www.indiewire.com/wp-content/uploads/2021/06/MCDAVAT_FE094.jpg?resize=960,540"
-            />
-            <AuthorContainer>
-              <AuthorName>Rohit Saini</AuthorName>
-              <Time>2 days ago</Time>
-            </AuthorContainer>
-          </HeaderLeft>
-          <HeaderRight>
-            <MoreHorizIcon style={{ cursor: "pointer" }} />
-          </HeaderRight>
-        </Header>
-
-        <Content>
-          <Image
-            src="https://code.visualstudio.com/assets/docs/editor/userdefinedsnippets/builtin-javascript-snippets.png"
-            alt="post"
+    <PostContainer>
+      <Header>
+        <HeaderLeft>
+          <Avatar
+            alt="Rohit Saini"
+            src="https://www.indiewire.com/wp-content/uploads/2021/06/MCDAVAT_FE094.jpg?resize=960,540"
           />
-        </Content>
+          <AuthorContainer>
+            <AuthorName>Rohit Saini</AuthorName>
+            <Time>2 days ago</Time>
+          </AuthorContainer>
+        </HeaderLeft>
+        <HeaderRight>
+          <MoreHorizIcon style={{ cursor: "pointer" }} />
+        </HeaderRight>
+      </Header>
 
-        <PostBottom>
-          <FavoriteBorderIcon style={{ cursor: "pointer" }} />
-          <CommentIcon style={{ cursor: "pointer" }} />
-          <ShareIcon style={{ cursor: "pointer" }} />
-        </PostBottom>
-      </PostContainer>
-    </Container>
+      <Content>
+        <Image
+          src="https://code.visualstudio.com/assets/docs/editor/userdefinedsnippets/builtin-javascript-snippets.png"
+          alt="post"
+        />
+      </Content>
+
+      <PostBottom>
+        <FavoriteBorderIcon style={{ cursor: "pointer" }} />
+        <CommentIcon style={{ cursor: "pointer" }} />
+        <ShareIcon style={{ cursor: "pointer" }} />
+      </PostBottom>
+    </PostContainer>
   );
 }
 

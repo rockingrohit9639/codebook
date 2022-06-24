@@ -10,6 +10,7 @@ import Logout from "./Logout/Logout";
 import Profile from "./Components/Profile/Profile";
 import CreatePost from "./Components/CreatePost/CreatePost";
 import server from "./axios/instance";
+import Home from "./Components/Home/Home";
 
 function App() {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Post />} />
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/logout" element={<Logout />} />
