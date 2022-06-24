@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Controlled as CodeMirror } from "react-codemirror2";
 
@@ -50,7 +50,12 @@ import LanguageIcon from "@mui/icons-material/Language";
 import Tooltip from "@mui/material/Tooltip";
 import Dropdown from "../Dropdown/Dropdown";
 
-import { THEMES, LANGUAGES } from "../../utils/constants";
+import { THEMES, LANGUAGES, defaultCode } from "../../utils/constants";
+import { componentToImage } from "../../utils/componentToImage";
+import { handleUpload } from "../../utils/handleUpload";
+
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -143,24 +148,42 @@ const Input = styled.input`
   background: transparent;
 `;
 
+const SubmitButton = styled.button``;
+
 function CreatePost() {
   // TODO: Show number of line
-
-  const [editorValue, setEditorValue] = useState(
-    `
-let message = 'I love javascript';  
-console.log(message);
-    `
-  );
-
+  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const [editorValue, setEditorValue] = useState("");
   const [theme, setTheme] = useState("material");
   const [language, setLanguage] = useState("javascript");
   const [bgColor, setBgColor] = useState("#f8e71d");
+  const [postTitle, setPostTitle] = useState("");
+  const postRef = useRef();
+  const navigate = useNavigate();
+
+  const handlePostSubmit = async () => {
+    const image = await componentToImage(postRef.current);
+    const imageURL = await handleUpload(image, user.username);
+    console.log(imageURL);
+  };
+
+  useEffect(() => {
+    // if (!isAuthenticated) {
+    //   return navigate("/login");
+    // }
+
+    setEditorValue(defaultCode);
+  }, [isAuthenticated, navigate]);
 
   return (
     <Container>
       <InputBox>
-        <Input type={"text"} placeholder="Enter post title..." />
+        <Input
+          type={"text"}
+          placeholder="Enter post title..."
+          value={postTitle}
+          onChange={(e) => setPostTitle(e.target.value)}
+        />
       </InputBox>
 
       <Menu>
@@ -192,10 +215,12 @@ console.log(message);
             onChange={(e) => setBgColor(e.target.value)}
           />
         </Tooltip>
+
+        <SubmitButton onClick={handlePostSubmit}>Post</SubmitButton>
       </Menu>
 
       <CodeWrapper>
-        <CodeOverlay bgColor={bgColor}>
+        <CodeOverlay bgColor={bgColor} ref={postRef}>
           <MenuIcons src="/assets/menu-buttons.svg" />
 
           <CodeMirror
