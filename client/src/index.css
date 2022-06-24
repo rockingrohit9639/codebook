@@ -38,3 +38,8 @@ a {
 .MuiOutlinedInput-notchedOutline {
   border: 0 !important;
 }
+
+/* MUI Backdrop  */
+.MuiBackdrop-root {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+}
