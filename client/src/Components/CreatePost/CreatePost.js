@@ -61,6 +61,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import server from "../../axios/instance";
+import Loading from "../Loading/Loading";
 
 const Container = styled.div`
   width: 100%;
@@ -167,13 +168,21 @@ const SubmitButton = styled.button`
 
 function CreatePost() {
   // TODO: Show number of line
+  
   const { isAuthenticated, user } = useSelector((state) => state.user);
+
+  // States
   const [editorValue, setEditorValue] = useState("");
   const [theme, setTheme] = useState("material");
   const [language, setLanguage] = useState("javascript");
-  const [bgColor, setBgColor] = useState("#f8e71d");
+  const [bgColor, setBgColor] = useState("#5701ff");
   const [postTitle, setPostTitle] = useState("");
+  const [loading, setLoading] = useState(false);
+  // States
+
+  // Editor Ref
   const postRef = useRef();
+
   const navigate = useNavigate();
 
   const handlePostSubmit = async () => {
@@ -183,6 +192,9 @@ function CreatePost() {
     }
 
     try {
+      // Setting loading to true
+      setLoading(true);
+
       // Getting base64 encoded image
       const image = await componentToImage(postRef.current);
 
@@ -203,6 +215,7 @@ function CreatePost() {
         navigate("/");
       }
     } catch (err) {
+      setLoading(false);
       if (err.response) {
         toast.error(err.response.data.message);
       }
@@ -231,6 +244,9 @@ function CreatePost() {
         draggable
         pauseOnHover
       />
+
+      {loading && <Loading loading={loading} title="Adding your post." />}
+
       <InputBox>
         <Input
           type={"text"}
