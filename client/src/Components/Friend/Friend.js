@@ -29,11 +29,11 @@ const DeleteIconBox = styled.div`
   border-radius: 50%;
 `;
 
-function Friend({ friend }) {
+function Friend({ friend, style }) {
   const navigate = useNavigate();
 
   return (
-    <FriendContainer>
+    <FriendContainer style={style}>
       <Avatar alt="friend" src={friend.photoURL || "/assets/images/logo.png"} />
       <FriendName onClick={() => navigate(`/profile/${friend.userID}`)}>
         {friend.username}

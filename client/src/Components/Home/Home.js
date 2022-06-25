@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import server from "../../axios/instance";
+import Friend from "../Friend/Friend";
 import Post from "../Posts/Post";
 
 const Container = styled.div`
@@ -15,12 +17,13 @@ const Container = styled.div`
 `;
 
 const HomeLeft = styled.div`
-  flex: 1;
+  flex: 70%;
   padding: 2rem;
 `;
 
 const HomeRight = styled.div`
-  flex: 1;
+  flex: 30%;
+  padding: 2rem 1rem;
 `;
 
 const AddPostButton = styled.button`
@@ -37,9 +40,22 @@ const AddPostButton = styled.button`
   box-shadow: 0px 4px 13px -1px rgba(87, 1, 255, 0.5);
 `;
 
+const FriendsBox = styled.div`
+  background: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px -10px rgba(0, 0, 0, 0.2);
+`;
+
+const Title = styled.h1`
+  margin-bottom: 1rem;
+`;
+
 function Home() {
   const [allPosts, setAllPosts] = useState([]);
   const navigate = useNavigate();
+  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const [userFriends, setUserFriends] = useState([]);
 
   useEffect(() => {
     const getAllPosts = async () => {
@@ -47,8 +63,18 @@ function Home() {
       setAllPosts(res.data);
     };
 
+    const getUserFriends = async () => {
+      const res = await server.get(
+        `/friends/all/${localStorage.getItem("userID")}`
+      );
+      setUserFriends(res.data);
+    };
+
     getAllPosts();
-  }, []);
+    getUserFriends();
+  }, [user.userID]);
+
+  console.log(userFriends);
 
   return (
     <Container>
@@ -61,7 +87,20 @@ function Home() {
           <Post key={index} post={post} />
         ))}
       </HomeLeft>
-      <HomeRight>right</HomeRight>
+      <HomeRight>
+        {isAuthenticated && (
+          <FriendsBox>
+            <Title>Your Friends</Title>
+            {userFriends?.map((friend, index) => (
+              <Friend
+                key={index}
+                friend={friend}
+                style={{ marginTop: "1rem" }}
+              />
+            ))}
+          </FriendsBox>
+        )}
+      </HomeRight>
     </Container>
   );
 }
