@@ -123,7 +123,7 @@ function Signup() {
       try {
         const res = await server.post("/auth/register", signupData);
 
-        if (res.status === 200) {
+        if (res.status === 201) {
           toast.success(res.data.message);
           navigate("/login");
         }
