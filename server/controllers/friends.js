@@ -79,7 +79,10 @@ const getAllFriends = async (req, res) => {
   try {
     const allFriends = await Friends.findAll({
       where: {
-        [Op.or]: [{ senderID: req.userID }, { receiverID: req.userID }],
+        [Op.or]: [
+          { senderID: req.params.userid },
+          { receiverID: req.params.userid },
+        ],
         status: 1,
       },
       attributes: {
