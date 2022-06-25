@@ -15,6 +15,9 @@ const userSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
+    setUserProfile: (state, action) => {
+      state.user.photoURL = action.payload;
+    },
     logout: (state) => {
       state.isAuthenticated = false;
       state.user = {};
@@ -22,5 +25,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setAuth, setUser, logout } = userSlice.actions;
+export const { setAuth, setUser, logout, setUserProfile } = userSlice.actions;
 export default userSlice.reducer;
