@@ -6,6 +6,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import CommentIcon from "@mui/icons-material/Comment";
 import ShareIcon from "@mui/icons-material/Share";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const PostContainer = styled.div`
   max-width: 100%;
@@ -30,6 +31,7 @@ const AuthorContainer = styled.div``;
 
 const AuthorName = styled.h1`
   font-size: 1rem;
+  cursor: pointer;
 `;
 
 const Time = styled.p`
@@ -57,6 +59,7 @@ const PostBottom = styled.div`
 `;
 
 function Post({ post }) {
+  const navigate = useNavigate();
   return (
     <PostContainer>
       <Header>
@@ -66,7 +69,11 @@ function Post({ post }) {
             src={post.user.photoURL !== null ? post.user.photoURL : ""}
           />
           <AuthorContainer>
-            <AuthorName>{post.user.username}</AuthorName>
+            <AuthorName
+              onClick={() => navigate(`/profile/${post.user.userID}`)}
+            >
+              {post.user.username}
+            </AuthorName>
             <Time>{moment(post.createdAt).fromNow()}</Time>
           </AuthorContainer>
         </HeaderLeft>
@@ -76,7 +83,7 @@ function Post({ post }) {
       </Header>
 
       <Content>
-        <Image src={post.imgURL} alt="post" />
+        <Image src={post.imgURL || "/assets/images/logo.png"} alt="post" />
       </Content>
 
       <PostBottom>
