@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { ColorExtractor } from "react-color-extractor";
 // import { Link } from "react-router-dom";
 import styledComponents from "styled-components";
-import Post from "../Posts/Post";
 import Modal from "@mui/material/Modal";
 import { Button } from "../Basic/Basic";
 import Tabs from "@mui/material/Tabs";
@@ -11,6 +10,13 @@ import { styled } from "@mui/material/styles";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import Friend from "../Friend/Friend";
+import { handleProfilePhotoUpload } from "../../utils/handleProfilePhotoUpload";
+import { useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import server from "../../axios/instance";
+import { CircularProgress } from "@mui/material";
 
 const ProfileComponent = styledComponents.div``;
 
@@ -180,12 +186,12 @@ const Friends = styledComponents.div`
   justify-content: space-between;
 `;
 
-
-
 function Profile() {
   const [bgColor, setBgColor] = useState("");
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("one");
+  const [imageLoading, setImageLoading] = useState(false);
+  const { user } = useSelector((state) => state.user);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -199,8 +205,63 @@ function Profile() {
     setOpen(false);
   };
 
+  const handleProfileUpload = async (e) => {
+    const image = e.target.files[0];
+    // Uploading image to firebase storage
+    if (!image) {
+      toast.error("Please select an image.");
+      return;
+    }
+
+    if (
+      image.type !== "image/jpeg" &&
+      image.type !== "image/png" &&
+      image.type !== "image/jpg"
+    ) {
+      toast.error("Please select a valid image.");
+      return;
+    }
+
+    const url = await handleProfilePhotoUpload(
+      image,
+      user.username,
+      setImageLoading
+    );
+
+    if (url) {
+      try {
+        // Updating profile photo in database
+        const res = await server.put(`/users/update/${user.userID}`, {
+          photoURL: url,
+        });
+
+        if (res.status === 200) {
+          toast.success("Profile photo updated successfully.");
+        }
+      } catch (err) {
+        if (err.response) {
+          toast.error(err.response.data.message);
+        }
+        console.log(err);
+      }
+    } else {
+      toast.error("Error uploading image.");
+    }
+  };
+
   return (
     <ProfileComponent>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <ProfileBg bgColor={bgColor} />
       <ProfileInfo>
         <ProfileInfoLeft>
@@ -243,9 +304,23 @@ function Profile() {
           <Row>
             <RowHead>Profile Photo</RowHead>
             <RowItem>
-              <Input type={"file"} />
+              <Input
+                type={"file"}
+                onChange={handleProfileUpload}
+                accept="image/x-png,image/jpeg,png"
+              />
             </RowItem>
           </Row>
+
+          {imageLoading && (
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <CircularProgress
+                style={{ color: "#5701ff", marginRight: "2rem" }}
+                size={20}
+              />
+              <Typography>Uploading image...</Typography>
+            </Box>
+          )}
 
           <Row>
             <RowHead>DOB</RowHead>
@@ -264,7 +339,7 @@ function Profile() {
           <Row>
             <RowHead>Bio</RowHead>
             <RowItem>
-              <TextArea rows={5}> </TextArea>
+              <TextArea rows={5}></TextArea>
             </RowItem>
           </Row>
 
@@ -306,9 +381,7 @@ function Profile() {
 
               <FriendRequestButton>Friend Requests</FriendRequestButton>
             </ProfileDetailsLeft>
-            <ProfileDetailsRight>
-              <Post />
-            </ProfileDetailsRight>
+            <ProfileDetailsRight>{/* <Post /> */}</ProfileDetailsRight>
           </ProfileDetails>
         </TabPanel>
 
