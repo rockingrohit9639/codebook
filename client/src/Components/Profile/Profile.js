@@ -11,7 +11,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import Friend from "../Friend/Friend";
 import { handleProfilePhotoUpload } from "../../utils/handleProfilePhotoUpload";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -194,6 +194,7 @@ function Profile() {
   const [imageLoading, setImageLoading] = useState(false);
   const { user } = useSelector((state) => state.user);
   const { userID } = useParams();
+  const dispatch = useDispatch();
 
   const [userProfile, setUserProfile] = useState({});
   const [userFriends, setUserFriends] = useState([]);
@@ -252,6 +253,7 @@ function Profile() {
 
     if (url) {
       try {
+        dispatch(setUserProfile(url));
         // Updating profile photo in database
         const res = await server.put("/users/update", {
           photoURL: url,
@@ -296,7 +298,7 @@ function Profile() {
                   borderRadius: "50%",
                   border: "5px solid #F3F5F8",
                 }}
-                src={userProfile?.photoURL}
+                src={userProfile?.photoURL || "/assets/images/logo.png"}
                 alt={userProfile?.username}
               />
             </ColorExtractor>
