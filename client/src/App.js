@@ -34,7 +34,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/logout" element={<Logout />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:userID" element={<Profile />} />
           <Route path="/create-post" element={<CreatePost />} />
         </Routes>
       </Router>

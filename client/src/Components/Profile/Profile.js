@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ColorExtractor } from "react-color-extractor";
 // import { Link } from "react-router-dom";
 import styledComponents from "styled-components";
@@ -17,6 +17,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import server from "../../axios/instance";
 import { CircularProgress } from "@mui/material";
+import { useParams } from "react-router-dom";
 
 const ProfileComponent = styledComponents.div``;
 
@@ -192,6 +193,19 @@ function Profile() {
   const [value, setValue] = useState("one");
   const [imageLoading, setImageLoading] = useState(false);
   const { user } = useSelector((state) => state.user);
+  const { userID } = useParams();
+
+  const [userProfile, setUserProfile] = useState({});
+
+  useEffect(() => {
+    const getUserProfile = async () => {
+      // Getting user profile
+      const res = await server.get(`/users/details/${userID}`);
+      setUserProfile(res.data);
+    };
+
+    getUserProfile();
+  }, [userID]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -231,7 +245,7 @@ function Profile() {
     if (url) {
       try {
         // Updating profile photo in database
-        const res = await server.put(`/users/update/${user.userID}`, {
+        const res = await server.put("/users/update", {
           photoURL: url,
         });
 
@@ -274,20 +288,22 @@ function Profile() {
                   borderRadius: "50%",
                   border: "5px solid #F3F5F8",
                 }}
-                src="https://i.imgur.com/OCyjHNF.jpg"
-                alt="alternate"
+                src={userProfile?.photoURL}
+                alt={userProfile?.username}
               />
             </ColorExtractor>
           </ProfileImageBox>
         </ProfileInfoLeft>
         <ProfileInfoCenter>
-          <ProfileName>_rohit__404</ProfileName>
-          <ProfileEmail>rohit@gmail.com</ProfileEmail>
-          <ProfileBio>Lemme show my code on Codebook.</ProfileBio>
+          <ProfileName>{userProfile?.username}</ProfileName>
+          <ProfileEmail>{userProfile?.email}</ProfileEmail>
+          <ProfileBio>{userProfile?.bio}</ProfileBio>
         </ProfileInfoCenter>
-        <ProfileInfoRight>
-          <Button onClick={() => setOpen(true)}>Edit Profile</Button>
-        </ProfileInfoRight>
+        {user.userID === userProfile?.userID && (
+          <ProfileInfoRight>
+            <Button onClick={() => setOpen(true)}>Edit Profile</Button>
+          </ProfileInfoRight>
+        )}
       </ProfileInfo>
 
       <Modal
@@ -364,15 +380,19 @@ function Profile() {
             <ProfileDetailsLeft>
               <AboutTitle>About</AboutTitle>
               <hr />
-              <Row>
-                <RowHead>DOB</RowHead>
-                <RowItem>24/02/2001</RowItem>
-              </Row>
+              {userProfile?.DOB && (
+                <Row>
+                  <RowHead>DOB</RowHead>
+                  <RowItem>{userProfile?.DOB}</RowItem>
+                </Row>
+              )}
 
-              <Row>
-                <RowHead>Gender</RowHead>
-                <RowItem>Male</RowItem>
-              </Row>
+              {userProfile?.gender && (
+                <Row>
+                  <RowHead>Gender</RowHead>
+                  <RowItem>{userProfile?.gender}</RowItem>
+                </Row>
+              )}
 
               <Row>
                 <RowHead>Friends</RowHead>
