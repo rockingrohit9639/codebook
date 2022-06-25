@@ -3,7 +3,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ChatIcon from "@mui/icons-material/Chat";
 import Avatar from "@mui/material/Avatar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const NavbarContainer = styled.div`
@@ -83,8 +83,8 @@ const LinkBox = styled(Link)`
 `;
 
 function Navbar() {
-  const { isAuthenticated } = useSelector((state) => state.user);
-  const user = useSelector((state) => state.user);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
   return (
     <NavbarContainer>
@@ -109,7 +109,12 @@ function Navbar() {
           </SearchIconBox>
           <NotificationsIcon style={{ cursor: "pointer" }} />
           <ChatIcon style={{ cursor: "pointer" }} />
-          <Avatar alt={user.username} src={user.photoURL} />
+          <Avatar
+            style={{ cursor: "pointer" }}
+            alt={user.username}
+            src={user.photoURL}
+            onClick={() => navigate(`/profile/${user.userID}`)}
+          />
           <LinkBox to="/logout">Logout</LinkBox>
         </Right>
       ) : (
