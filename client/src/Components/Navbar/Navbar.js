@@ -5,6 +5,7 @@ import ChatIcon from "@mui/icons-material/Chat";
 import Avatar from "@mui/material/Avatar";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Tooltip } from "@mui/material";
 
 const NavbarContainer = styled.div`
   width: 100%;
@@ -109,12 +110,15 @@ function Navbar() {
           </SearchIconBox>
           <NotificationsIcon style={{ cursor: "pointer" }} />
           <ChatIcon style={{ cursor: "pointer" }} />
-          <Avatar
-            style={{ cursor: "pointer" }}
-            alt={user.username}
-            src={user.photoURL}
-            onClick={() => navigate(`/profile/${user.userID}`)}
-          />
+
+          <Tooltip title={"Your Profile"}>
+            <Avatar
+              style={{ cursor: "pointer" }}
+              alt={user.username}
+              src={user.photoURL || "/assets/images/logo.png"}
+              onClick={() => navigate(`/profile/${user.userID}`)}
+            />
+          </Tooltip>
           <LinkBox to="/logout">Logout</LinkBox>
         </Right>
       ) : (
