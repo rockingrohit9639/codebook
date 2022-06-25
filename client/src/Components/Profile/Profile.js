@@ -196,6 +196,7 @@ function Profile() {
   const { userID } = useParams();
 
   const [userProfile, setUserProfile] = useState({});
+  const [userFriends, setUserFriends] = useState([]);
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -204,7 +205,14 @@ function Profile() {
       setUserProfile(res.data);
     };
 
+    // Getting user friends
+    const getUserFriends = async () => {
+      const res = await server.get(`/friends/all/${userID}`);
+      setUserFriends(res.data);
+    };
+
     getUserProfile();
+    getUserFriends();
   }, [userID]);
 
   const handleChange = (event, newValue) => {
@@ -396,7 +404,7 @@ function Profile() {
 
               <Row>
                 <RowHead>Friends</RowHead>
-                <RowItem>50</RowItem>
+                <RowItem>{userFriends?.length}</RowItem>
               </Row>
 
               <FriendRequestButton>Friend Requests</FriendRequestButton>
