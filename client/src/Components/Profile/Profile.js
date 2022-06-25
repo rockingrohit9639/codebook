@@ -417,15 +417,9 @@ function Profile() {
 
         <TabPanel value="two">
           <Friends>
-            <Friend />
-            <Friend />
-            <Friend />
-            <Friend />
-            <Friend />
-            <Friend />
-            <Friend />
-            <Friend />
-            <Friend />
+            {userFriends?.map((friend, index) => (
+              <Friend key={index} friend={friend} />
+            ))}
           </Friends>
         </TabPanel>
       </TabContext>

@@ -2,6 +2,7 @@ import { Avatar } from "@mui/material";
 import React from "react";
 import styled from "styled-components";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
 
 const FriendContainer = styled.div`
   display: flex;
@@ -15,6 +16,7 @@ const FriendContainer = styled.div`
 
 const FriendName = styled.h1`
   font-size: 1.2rem;
+  cursor: pointer;
 `;
 
 const DeleteIconBox = styled.div`
@@ -27,11 +29,15 @@ const DeleteIconBox = styled.div`
   border-radius: 50%;
 `;
 
-function Friend() {
+function Friend({ friend }) {
+  const navigate = useNavigate();
+
   return (
     <FriendContainer>
-      <Avatar alt="friend" src="https://i.imgur.com/OCyjHNF.jpg" />
-      <FriendName>Lalit Singh</FriendName>
+      <Avatar alt="friend" src={friend.photoURL || "/assets/images/logo.png"} />
+      <FriendName onClick={() => navigate(`/profile/${friend.userID}`)}>
+        {friend.username}
+      </FriendName>
       <DeleteIconBox>
         <DeleteIcon style={{ color: "red" }} />
       </DeleteIconBox>
