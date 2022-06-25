@@ -9,6 +9,6 @@ const {
 const router = require("express").Router();
 
 router.get("/details/:userid", getUserDetails);
-router.put("/update/:userid", verifyToken, updateUserDetails);
+router.put("/update", verifyToken, updateUserDetails);
 
 module.exports = router;

@@ -29,7 +29,7 @@ const updateUserDetails = async (req, res) => {
       {
         ...req.body,
       },
-      { where: { userID: req.params.userid } }
+      { where: { userID: req.userID } }
     );
 
     if (!updated) {
