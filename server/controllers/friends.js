@@ -103,9 +103,8 @@ const getAllFriends = async (req, res) => {
     });
 
     const friends = [];
-
     for (let fr of allFriends) {
-      if (fr.dataValues.receiver.dataValues.userID == req.userID) {
+      if (fr.dataValues.receiver.dataValues.userID == req.params.userid) {
         friends.push(fr.dataValues.sender.dataValues);
       } else {
         friends.push(fr.dataValues.receiver.dataValues);
