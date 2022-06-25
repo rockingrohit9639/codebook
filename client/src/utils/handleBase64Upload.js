@@ -2,7 +2,7 @@ import { storage } from "../firebaseConfig";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { v4 as uuid } from "uuid";
 
-export const handleUpload = async (image, username = "random") => {
+export const handleBase64Upload = async (image, username = "random") => {
   if (!image) {
     return "Image is required";
   }

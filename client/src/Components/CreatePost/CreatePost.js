@@ -55,7 +55,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Dropdown from "../Dropdown/Dropdown";
 import { THEMES, LANGUAGES, defaultCode } from "../../utils/constants";
 import { componentToImage } from "../../utils/componentToImage";
-import { handleUpload } from "../../utils/handleUpload";
+import { handleBase64Upload } from "../../utils/handleBase64Upload";
 
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -199,7 +199,7 @@ function CreatePost() {
       const image = await componentToImage(postRef.current);
 
       // Uploading image to firebase storage
-      const imgURL = await handleUpload(image, user.username);
+      const imgURL = await handleBase64Upload(image, user.username);
       const data = {
         postTitle,
         imgURL,
