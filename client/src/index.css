@@ -32,6 +32,7 @@ a {
   font-size: 1rem;
   font-family: "Fira Code", monospace;
   box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.4);
+  height: max-content !important;
 }
 
 /* Removing style from Material UI Select  */
