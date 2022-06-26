@@ -18,6 +18,7 @@ import Typography from "@mui/material/Typography";
 import server from "../../axios/instance";
 import { CircularProgress } from "@mui/material";
 import { useParams } from "react-router-dom";
+import { setUserProfilePhoto } from "../../redux/userRedux";
 
 const ProfileComponent = styledComponents.div``;
 
@@ -253,7 +254,9 @@ function Profile() {
 
     if (url) {
       try {
-        dispatch(setUserProfile(url));
+        // Updating user in redux
+        dispatch(setUserProfilePhoto(url));
+
         // Updating profile photo in database
         const res = await server.put("/users/update", {
           photoURL: url,

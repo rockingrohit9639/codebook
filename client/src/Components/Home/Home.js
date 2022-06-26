@@ -74,8 +74,6 @@ function Home() {
     getUserFriends();
   }, [user.userID]);
 
-  console.log(userFriends);
-
   return (
     <Container>
       <HomeLeft>
