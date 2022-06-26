@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Controlled as CodeMirror } from "react-codemirror2";
 
@@ -53,7 +53,7 @@ import Tooltip from "@mui/material/Tooltip";
 // Material UI Imports
 
 import Dropdown from "../Dropdown/Dropdown";
-import { THEMES, LANGUAGES, defaultCode } from "../../utils/constants";
+import { THEMES, LANGUAGES, defaultCodes } from "../../utils/constants";
 import { componentToImage } from "../../utils/componentToImage";
 import { handleBase64Upload } from "../../utils/handleBase64Upload";
 
@@ -185,6 +185,52 @@ function CreatePost() {
 
   const navigate = useNavigate();
 
+  // Setting default code based on language selected
+
+  const setDefaultCode = useCallback(() => {
+    console.log(language);
+    switch (language) {
+      case "htmlmixed":
+        setEditorValue(defaultCodes.HTML);
+        return;
+      case "css":
+        setEditorValue(defaultCodes.CSS);
+        return;
+      case "javascript":
+        setEditorValue(defaultCodes.JavaScript);
+        return;
+      case "python":
+        setEditorValue(defaultCodes.Python);
+        return;
+      case "clike":
+        setEditorValue(defaultCodes.C);
+        return;
+      case "php":
+        setEditorValue(defaultCodes.PHP);
+        return;
+      case "powershell":
+        setEditorValue(defaultCodes.PowerShell);
+        return;
+      case "dart":
+        setEditorValue(defaultCodes.Dart);
+        return;
+      case "django":
+        setEditorValue(defaultCodes.Django);
+        return;
+      case "shell":
+        setEditorValue(defaultCodes.Shell);
+        return;
+      case "sql":
+        setEditorValue(defaultCodes.SQL);
+        return;
+      case "markdown":
+        setEditorValue(defaultCodes.Markdown);
+        return;
+      default:
+        setEditorValue("");
+    }
+  }, [language]);
+
   const handlePostSubmit = async () => {
     if (!postTitle || !editorValue) {
       toast.error("Please fill all the fields");
@@ -211,7 +257,7 @@ function CreatePost() {
       if (res.status === 200) {
         toast.success("Post created successfully");
         setPostTitle("");
-        setEditorValue(defaultCode);
+        // setEditorValue(defaultCode);
         navigate("/");
       }
     } catch (err) {
@@ -223,13 +269,18 @@ function CreatePost() {
     }
   };
 
+  const handleLangugaeChange = (e) => {
+    setLanguage(e.target.value);
+    setDefaultCode();
+  };
+
   useEffect(() => {
     if (!isAuthenticated) {
       return navigate("/login");
     }
 
-    setEditorValue(defaultCode);
-  }, [isAuthenticated, navigate]);
+    setDefaultCode();
+  }, [isAuthenticated, navigate, setDefaultCode]);
 
   return (
     <Container>
@@ -274,7 +325,7 @@ function CreatePost() {
             list={LANGUAGES}
             label={"Languages"}
             value={language}
-            onChange={(e) => setLanguage(e.target.value)}
+            onChange={handleLangugaeChange}
             valueKey="mode"
           />
         </MenuOption>

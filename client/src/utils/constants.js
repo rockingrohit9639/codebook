@@ -140,15 +140,134 @@ export const LANGUAGES = [
   },
 ];
 
-export const defaultCode = `
-const pluckDeep = key => obj => key.split('.').reduce((accum, key) => accum[key], obj)
+export const defaultCodes = {
+  HTML: `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Form in HTML</title>
+</head>
+<body>
+<form>
+  <label for="fname">First name:</label><br>
+  <input type="text" id="fname" name="fname"><br>
+  <label for="lname">Last name:</label><br>
+  <input type="text" id="lname" name="lname">
+</form>
+</body>
+</html>`,
+  CSS: `
+/* Changing background color  */
+body {
+  background-color: #f0f0f0;
+}
+`,
+  JavaScript: `
+// generating  a random number
+const a = Math.random();
+console.log(a);
+`,
+  Python: `
+# This program adds two numbers
 
-const compose = (...fns) => res => fns.reduce((accum, next) => next(accum), res)
+num1 = 1.5
+num2 = 6.3
+  
+# Add two numbers
+sum = num1 + num2
+  
+# Display the sum
+print('The sum of {0} and {1} is {2}'.format(num1, num2, sum)) 
+`,
+  C: `
+#include <stdio.h>
+int main() {   
+  int number;
+     
+  printf("Enter an integer: ");  
+      
+  // reads and stores input
+  scanf("%d", &number);
+  
+  // displays output
+  printf("You entered: %d", number);
+      
+  return 0;
+}  
+`,
+  PHP: `
+<?php
+  $name = "Codebook";
+  echo "Hey! This is " . $name . "<br>";
+?>
+`,
+  PowerShell: `
+## Define the service name in a variable
+$ServiceName = 'EventLog'
+  
+## Read the service from Windows to return a service object
+$ServiceInfo = Get-Service -Name $ServiceName
+  
+## If the server is not running (ne)
+if ($ServiceInfo.Status -ne 'Running') {
+  ## Write to the console that the service is not running
+  Write-Host 'Service is not started, starting service'
 
-const unfold = (f, seed) => {
-  const go = (f, seed, acc) => {
-    const res = f(seed)
-    return res ? go(f, res[1], acc.concat([res[0]])) : acc
-  }
-  return go(f, seed, [])
-}`;
+  ## Start the service
+  Start-Service -Name $ServiceName
+
+  ## Update the $ServiceInfo object to reflect the new state
+  $ServiceInfo.Refresh()
+
+  ## Write to the console the Status property which indicates the state of the service
+  Write-Host $ServiceInfo.Status
+} else { 
+  ## If the Status is anything but Running
+  ## Write to the console the service is already running
+  Write-Host 'The service is already running.'
+}
+`,
+  Dart: `
+int fibonacci(int n) {
+  if (n == 0 || n == 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+  
+var result = fibonacci(20);
+`,
+  Django: `
+{# Looping in Django #}
+
+<ul>
+  {% for x in mymembers %}
+    <li>{{ x.firstname }}</li>
+  {% endfor %}
+</ul>
+`,
+  Shell: `
+#!/bin/bash
+
+# Add two numeric value
+((sum=25+35))
+  
+#Print the result
+echo $sum
+`,
+  SQL: `
+-- creating a table
+
+CREATE TABLE STATION
+(ID INTEGER PRIMARY KEY,
+CITY CHAR(20),
+STATE CHAR(2),
+LAT_N REAL,
+LONG_W REAL);
+`,
+  Markdown: `
+# This is an H1 #
+
+## This is an H2 ##
+  
+### This is an H3 ###
+`,
+};
