@@ -14,16 +14,22 @@ import Home from "./Components/Home/Home";
 function App() {
   const dispatch = useDispatch();
   const token = localStorage.getItem("@ttookk");
+  const userID = localStorage.getItem("userID");
 
   useEffect(() => {
+    const getUserInfo = async () => {
+      const userInfo = await server.get(`/users/details/${JSON.parse(userID)}`);
+
+      dispatch(setUser(userInfo.data));
+    };
     if (localStorage.getItem("@ttookk")) {
       dispatch(setAuth(true));
-      dispatch(setUser(JSON.parse(localStorage.getItem("user"))));
       server.defaults.headers["token"] = `Bearer ${JSON.parse(token)}`;
+      getUserInfo();
     } else {
       dispatch(setAuth(false));
     }
-  }, [token, dispatch]);
+  }, [token, dispatch, userID]);
 
   return (
     <div className="App">
