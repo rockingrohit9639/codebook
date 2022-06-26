@@ -86,7 +86,7 @@ function Home() {
         ))}
       </HomeLeft>
       <HomeRight>
-        {isAuthenticated && (
+        {isAuthenticated && userFriends.length > 0 ? (
           <FriendsBox>
             <Title>Your Friends</Title>
             {userFriends?.map((friend, index) => (
@@ -97,7 +97,7 @@ function Home() {
               />
             ))}
           </FriendsBox>
-        )}
+        ) : null}
       </HomeRight>
     </Container>
   );

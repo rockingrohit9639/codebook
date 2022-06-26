@@ -189,6 +189,10 @@ const Friends = styledComponents.div`
   justify-content: space-between;
 `;
 
+const NoFriends = styledComponents.h2`
+  font-size: 1.5rem;
+`;
+
 function Profile() {
   const [bgColor, setBgColor] = useState("");
   const [open, setOpen] = useState(false);
@@ -471,11 +475,7 @@ function Profile() {
 
       <TabContext value={value}>
         <TabsBox>
-          <StyledTabs
-            value={value}
-            onChange={handleChange}
-            aria-label="styled tabs example"
-          >
+          <StyledTabs value={value} onChange={handleChange}>
             <StyledTab label="About" value={"one"} />
             <StyledTab label="Friends" value={"two"} />
           </StyledTabs>
@@ -513,9 +513,13 @@ function Profile() {
 
         <TabPanel value="two">
           <Friends>
-            {userFriends?.map((friend, index) => (
-              <Friend key={index} friend={friend} />
-            ))}
+            {userFriends.length > 0 ? (
+              userFriends?.map((friend, index) => (
+                <Friend key={index} friend={friend} />
+              ))
+            ) : (
+              <NoFriends>You have no friends.</NoFriends>
+            )}
           </Friends>
         </TabPanel>
       </TabContext>
