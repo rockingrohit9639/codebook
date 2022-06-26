@@ -18,7 +18,7 @@ import Typography from "@mui/material/Typography";
 import server from "../../axios/instance";
 import { CircularProgress } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { setUserProfilePhoto } from "../../redux/userRedux";
+import { setUserProfilePhoto, updateUserDetails } from "../../redux/userRedux";
 import Dropdown from "../Dropdown/Dropdown";
 
 const ProfileComponent = styledComponents.div``;
@@ -226,7 +226,12 @@ function Profile() {
 
     getUserProfile();
     getUserFriends();
-  }, [userID, user]);
+
+    setDob(userProfile.dob);
+    setWebsite(userProfile.website);
+    setBio(userProfile.bio);
+    setGender(userProfile.gender);
+  }, [userID, user, userProfile]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -316,6 +321,7 @@ function Profile() {
 
       const res = await server.put("/users/update", data);
       if (res.status === 200) {
+        dispatch(updateUserDetails(data));
         toast.success(res.data.message);
       } else {
         toast.error("Could not update your profile.");
