@@ -19,6 +19,7 @@ const getUserDetails = async (req, res) => {
 
     return res.status(200).json(others);
   } catch (err) {
+    console.log(err);
     return res.status(500).json({ message: "Internal Server Error!" });
   }
 };
@@ -36,7 +37,9 @@ const updateUserDetails = async (req, res) => {
       return res.status(404).json({ message: "Could not update the user." });
     }
 
-    return res.status(200).json({ message: "User updated successfully." });
+    return res
+      .status(200)
+      .json({ message: "Your details updated successfully." });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Internal Server Error!" });

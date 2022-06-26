@@ -12,19 +12,20 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isUnique: async (value, next) => {
           try {
-            const isUsernameExists = await Users.findOne({ where: { username: value }});
+            const isUsernameExists = await Users.findOne({
+              where: { username: value },
+            });
 
-            if(isUsernameExists){
+            if (isUsernameExists) {
               return next("Username is already in use!");
             }
 
             next();
-          }
-          catch(err){
+          } catch (err) {
             return next(err);
           }
-        }
-      }
+        },
+      },
     },
     email: {
       type: DataTypes.STRING,
@@ -37,8 +38,8 @@ module.exports = (sequelize, DataTypes) => {
               attributes: ["userID"],
             });
 
-            if(isExists){
-              return next("Email is already in use!")
+            if (isExists) {
+              return next("Email is already in use!");
             }
 
             next();
@@ -64,6 +65,10 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: "Lemme show my code on Codebook",
     },
     DOB: DataTypes.DATEONLY,
+    website: {
+      type: DataTypes.STRING,
+      defaultValue: null,
+    },
   });
 
   return Users;

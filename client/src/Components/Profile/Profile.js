@@ -19,6 +19,7 @@ import server from "../../axios/instance";
 import { CircularProgress } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { setUserProfilePhoto } from "../../redux/userRedux";
+import Dropdown from "../Dropdown/Dropdown";
 
 const ProfileComponent = styledComponents.div``;
 
@@ -104,7 +105,7 @@ const Row = styledComponents.div`
 
 const RowHead = styledComponents.h3``;
 
-const RowItem = styledComponents.p``;
+const RowItem = styledComponents.div``;
 
 const FriendRequestButton = styledComponents.button`
   width: 100%;
@@ -201,6 +202,11 @@ function Profile() {
   const [userProfile, setUserProfile] = useState({});
   const [userFriends, setUserFriends] = useState([]);
 
+  const [dob, setDob] = useState("");
+  const [website, setWebsite] = useState("");
+  const [bio, setBio] = useState("");
+  const [gender, setGender] = useState("");
+
   useEffect(() => {
     const getUserProfile = async () => {
       if (userID === localStorage.getItem("userID")) {
@@ -281,6 +287,47 @@ function Profile() {
     }
   };
 
+  const handleProfileDetailsUpdate = async () => {
+    try {
+      const data = {};
+
+      if (dob !== "") {
+        data.DOB = dob;
+      }
+      if (website !== "") {
+        const expression =
+          /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+        const regex = new RegExp(expression);
+
+        if (!website.match(regex)) {
+          toast.error("Please enter a valid website URL.");
+          return;
+        } else {
+          data.website = website;
+        }
+      }
+      if (bio !== "") {
+        data.bio = bio;
+      }
+
+      if (gender !== "") {
+        data.gender = gender;
+      }
+
+      const res = await server.put("/users/update", data);
+      if (res.status === 200) {
+        toast.success(res.data.message);
+      } else {
+        toast.error("Could not update your profile.");
+      }
+    } catch (err) {
+      if (err.response) {
+        toast.error(err.response.data.message);
+      }
+      console.log(err);
+    }
+  };
+
   return (
     <ProfileComponent>
       <ToastContainer
@@ -305,7 +352,7 @@ function Profile() {
                   height: "18rem",
                   borderRadius: "50%",
                   border: "5px solid #F3F5F8",
-                  objectFit: "cover"
+                  objectFit: "cover",
                 }}
                 src={userProfile?.photoURL || "/assets/images/logo.png"}
                 alt={userProfile?.username}
@@ -360,25 +407,59 @@ function Profile() {
           <Row>
             <RowHead>DOB</RowHead>
             <RowItem>
-              <Input type={"date"} />
+              <Input
+                type={"date"}
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+              />
             </RowItem>
           </Row>
 
           <Row>
             <RowHead>Website</RowHead>
             <RowItem>
-              <Input type={"url"} />
+              <Input
+                type={"url"}
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+              />
+            </RowItem>
+          </Row>
+
+          <Row>
+            <RowHead>Gender</RowHead>
+            <RowItem>
+              <Dropdown
+                label={"Gender"}
+                list={[
+                  {
+                    name: "Male",
+                    value: "male",
+                  },
+                  {
+                    name: "Female",
+                    value: "female",
+                  },
+                ]}
+                onChange={(e) => setGender(e.target.value)}
+                value={gender}
+                valueKey={"value"}
+              />
             </RowItem>
           </Row>
 
           <Row>
             <RowHead>Bio</RowHead>
             <RowItem>
-              <TextArea rows={5}></TextArea>
+              <TextArea
+                rows={5}
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+              ></TextArea>
             </RowItem>
           </Row>
 
-          <Button>Submit</Button>
+          <Button onClick={handleProfileDetailsUpdate}>Submit</Button>
         </ModalBox>
       </Modal>
 

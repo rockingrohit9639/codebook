@@ -14,7 +14,7 @@ sequelize
 const forceSync = async () => {
   try {
     await sequelize.query("SET FOREIGN_KEY_CHECKS = 0");
-    await sequelize.sync({ alter: false });
+    await sequelize.sync({ force: false, alter: false });
     await sequelize.query("SET FOREIGN_KEY_CHECKS = 1");
   } catch (err) {
     console.log(err);
