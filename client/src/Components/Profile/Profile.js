@@ -195,6 +195,7 @@ function Profile() {
   const [imageLoading, setImageLoading] = useState(false);
   const { user } = useSelector((state) => state.user);
   const { userID } = useParams();
+
   const dispatch = useDispatch();
 
   const [userProfile, setUserProfile] = useState({});
@@ -202,9 +203,13 @@ function Profile() {
 
   useEffect(() => {
     const getUserProfile = async () => {
-      // Getting user profile
-      const res = await server.get(`/users/details/${userID}`);
-      setUserProfile(res.data);
+      if (userID === localStorage.getItem("userID")) {
+        setUserProfile(user);
+      } else {
+        // Getting user profile
+        const res = await server.get(`/users/details/${userID}`);
+        setUserProfile(res.data);
+      }
     };
 
     // Getting user friends
@@ -215,7 +220,7 @@ function Profile() {
 
     getUserProfile();
     getUserFriends();
-  }, [userID]);
+  }, [userID, user]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -300,6 +305,7 @@ function Profile() {
                   height: "18rem",
                   borderRadius: "50%",
                   border: "5px solid #F3F5F8",
+                  objectFit: "cover"
                 }}
                 src={userProfile?.photoURL || "/assets/images/logo.png"}
                 alt={userProfile?.username}
