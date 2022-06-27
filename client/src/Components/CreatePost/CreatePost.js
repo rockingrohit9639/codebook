@@ -51,7 +51,12 @@ import LanguageIcon from "@mui/icons-material/Language";
 import UploadIcon from "@mui/icons-material/Upload";
 import Tooltip from "@mui/material/Tooltip";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Menu as MuiMenu } from "@mui/material";
+import {
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Menu as MuiMenu,
+} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 // Material UI Imports
 
@@ -205,6 +210,8 @@ function CreatePost() {
   const [bgColor, setBgColor] = useState("#5701ff");
   const [postTitle, setPostTitle] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showNumberLine, setShowNumberLine] = useState(false);
+  console.log(showNumberLine);
   // States
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -428,8 +435,18 @@ function CreatePost() {
               onClick={() => handleSetDeaultTheme("the-metrix", "#7948B9")}
             />
           </DefaultThemes>
-          <MenuItem onClick={handleSettingMenuClose}>My account</MenuItem>
-          <MenuItem onClick={handleSettingMenuClose}>Logout</MenuItem>
+
+          <FormGroup sx={{ padding: "0.5rem" }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  value={showNumberLine}
+                  onChange={(e) => setShowNumberLine(e.target.checked)}
+                />
+              }
+              label="Show Number Line"
+            />
+          </FormGroup>
         </MuiMenu>
 
         <SubmitButton onClick={handlePostSubmit}>
@@ -454,7 +471,7 @@ function CreatePost() {
             value={editorValue}
             options={{
               screenReaderLabel: "Code editor",
-              lineNumbers: false,
+              lineNumbers: showNumberLine,
               firstLineNumber: 0,
               mode: language,
               theme: theme,
