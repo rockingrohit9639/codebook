@@ -50,6 +50,9 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LanguageIcon from "@mui/icons-material/Language";
 import UploadIcon from "@mui/icons-material/Upload";
 import Tooltip from "@mui/material/Tooltip";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { Menu as MuiMenu } from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
 // Material UI Imports
 
 import Dropdown from "../Dropdown/Dropdown";
@@ -154,6 +157,14 @@ const Input = styled.input`
   background: transparent;
 `;
 
+const Button = styled.button`
+  border: none;
+  outline: none;
+  background-color: transparent;
+  padding: 0.7rem 0.5rem;
+  cursor: pointer;
+`;
+
 const SubmitButton = styled.button`
   display: flex;
   align-items: center;
@@ -179,6 +190,17 @@ function CreatePost() {
   const [postTitle, setPostTitle] = useState("");
   const [loading, setLoading] = useState(false);
   // States
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const settingMenuOpen = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  
+  const handleSettingMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   // Editor Ref
   const postRef = useRef();
@@ -337,6 +359,37 @@ function CreatePost() {
           />
         </Tooltip>
 
+        <MenuOption>
+          <Tooltip title={"More Options"}>
+            <Button
+              id="basic-button"
+              aria-controls={settingMenuOpen ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={settingMenuOpen ? "true" : undefined}
+              onClick={handleClick}
+            >
+              <SettingsIcon />
+            </Button>
+          </Tooltip>
+        </MenuOption>
+
+        <MuiMenu
+          id="basic-menu"
+          sx={{
+            background: "none",
+          }}
+          anchorEl={anchorEl}
+          open={settingMenuOpen}
+          onClose={handleSettingMenuClose}
+          MenuListProps={{
+            "aria-labelledby": "basic-button",
+          }}
+        >
+          <MenuItem onClick={handleSettingMenuClose}>Profile</MenuItem>
+          <MenuItem onClick={handleSettingMenuClose}>My account</MenuItem>
+          <MenuItem onClick={handleSettingMenuClose}>Logout</MenuItem>
+        </MuiMenu>
+
         <SubmitButton onClick={handlePostSubmit}>
           <p
             style={{
@@ -354,7 +407,6 @@ function CreatePost() {
       <CodeWrapper>
         <CodeOverlay bgColor={bgColor} ref={postRef}>
           <MenuIcons src="/assets/menu-buttons.svg" />
-
           <CodeMirror
             className="codemirror_wrapper"
             value={editorValue}

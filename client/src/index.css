@@ -30,7 +30,7 @@ a {
   border-radius: 5px;
   padding: 2rem;
   font-size: 1rem;
-  font-family: "Fira Code", monospace;
+  font-family: "Fira Code", monospace !important;
   box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.4);
   height: max-content !important;
 }
@@ -38,9 +38,4 @@ a {
 /* Removing style from Material UI Select  */
 .MuiOutlinedInput-notchedOutline {
   border: 0 !important;
-}
-
-/* MUI Backdrop  */
-.MuiBackdrop-root {
-  background-color: rgba(0, 0, 0, 0.8) !important;
 }

@@ -13,7 +13,11 @@ const Content = styled.div`
 function Loading({ loading, title }) {
   return (
     <Backdrop
-      sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      sx={{
+        color: "#fff",
+        backgroundColor: "rgba(0, 0, 0, 0.8) !important",
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+      }}
       open={loading}
     >
       <Content>

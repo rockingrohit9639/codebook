@@ -200,7 +200,7 @@ function Profile() {
   const [imageLoading, setImageLoading] = useState(false);
   const { user } = useSelector((state) => state.user);
   const { userID } = useParams();
-
+  
   const dispatch = useDispatch();
 
   const [userProfile, setUserProfile] = useState({});
