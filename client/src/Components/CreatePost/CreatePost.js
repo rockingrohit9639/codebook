@@ -23,7 +23,7 @@ import "codemirror/theme/monokai.css";
 import "codemirror/theme/neo.css";
 import "codemirror/theme/night.css";
 import "codemirror/theme/nord.css";
-// import "codemirror/theme/solarized.css";
+import "codemirror/theme/seti.css";
 import "codemirror/theme/the-matrix.css";
 import "codemirror/theme/twilight.css";
 import "codemirror/theme/yeti.css";
@@ -165,6 +165,22 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
+const DefaultThemes = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: scroll;
+  overflow-y: none;
+  padding: 0.5rem;
+`;
+
+const Theme = styled.img`
+  width: 10rem;
+  height: 5rem;
+  object-fit: contain;
+  cursor: pointer;
+`;
+
 const SubmitButton = styled.button`
   display: flex;
   align-items: center;
@@ -197,7 +213,7 @@ function CreatePost() {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  
+
   const handleSettingMenuClose = () => {
     setAnchorEl(null);
   };
@@ -210,7 +226,6 @@ function CreatePost() {
   // Setting default code based on language selected
 
   const setDefaultCode = useCallback(() => {
-    console.log(language);
     switch (language) {
       case "htmlmixed":
         setEditorValue(defaultCodes.HTML);
@@ -252,6 +267,11 @@ function CreatePost() {
         setEditorValue("");
     }
   }, [language]);
+
+  const handleSetDeaultTheme = (theme, bgColor) => {
+    setTheme(theme);
+    setBgColor(bgColor);
+  };
 
   const handlePostSubmit = async () => {
     if (!postTitle || !editorValue) {
@@ -377,6 +397,7 @@ function CreatePost() {
           id="basic-menu"
           sx={{
             background: "none",
+            maxWidth: "20rem",
           }}
           anchorEl={anchorEl}
           open={settingMenuOpen}
@@ -385,7 +406,28 @@ function CreatePost() {
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem onClick={handleSettingMenuClose}>Profile</MenuItem>
+          <DefaultThemes>
+            <Theme
+              src="/assets/themes/1.png"
+              onClick={() => handleSetDeaultTheme("seti", "#ABB8C3")}
+            />
+            <Theme
+              src="/assets/themes/2.png"
+              onClick={() => handleSetDeaultTheme("material", "#4A90E2")}
+            />
+            <Theme
+              src="/assets/themes/3.png"
+              onClick={() => handleSetDeaultTheme("blackboard", "#F8E71C")}
+            />
+            <Theme
+              src="/assets/themes/4.png"
+              onClick={() => handleSetDeaultTheme("neo", "#EF282C")}
+            />
+            <Theme
+              src="/assets/themes/5.png"
+              onClick={() => handleSetDeaultTheme("the-metrix", "#7948B9")}
+            />
+          </DefaultThemes>
           <MenuItem onClick={handleSettingMenuClose}>My account</MenuItem>
           <MenuItem onClick={handleSettingMenuClose}>Logout</MenuItem>
         </MuiMenu>
