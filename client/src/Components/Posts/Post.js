@@ -14,6 +14,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { ToastContainer, toast } from "react-toastify";
 import { deletePost } from "../../redux/postsRedux";
 import server from "../../axios/instance";
+import { handlePostImageDelete } from "../../utils/firebase";
 
 const PostContainer = styled.div`
   max-width: 100%;
@@ -89,8 +90,9 @@ function Post({ post }) {
         const res = await server.delete(`/posts/deletePost/${post.postID}`);
 
         if (res.status === 200) {
-          dispatch(deletePost(post.postID));
           setAnchorEl(null);
+          dispatch(deletePost(post.postID));
+          await handlePostImageDelete(post.imgURL);
         } else {
           toast.error("Error deleting post");
         }

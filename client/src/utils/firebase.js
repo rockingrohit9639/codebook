@@ -4,6 +4,7 @@ import {
   uploadString,
   getDownloadURL,
   uploadBytesResumable,
+  deleteObject,
 } from "firebase/storage";
 import { v4 as uuid } from "uuid";
 
@@ -58,6 +59,20 @@ export const handleProfilePhotoUpload = async (
     const downloadURL = await getDownloadURL(storageRef);
     setLoading(false);
     return downloadURL;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+// Deleting user post image from firebase storage
+export const handlePostImageDelete = async (imageUrl) => {
+  try {
+    // Creating ref for deleting file
+    const storageRef = ref(storage, imageUrl);
+
+    // Deleting image
+    await deleteObject(storageRef);
   } catch (err) {
     console.log(err);
     return null;
