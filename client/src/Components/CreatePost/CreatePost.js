@@ -206,7 +206,7 @@ const SubmitButton = styled.button`
 function CreatePost() {
   // TODO: Show number of line
 
-  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
 
   // States
   const [editorValue, setEditorValue] = useState("");
