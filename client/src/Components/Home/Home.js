@@ -63,16 +63,10 @@ function Home() {
       setAllPosts(res.data);
     };
 
-    const getUserFriends = async () => {
-      const res = await server.get(
-        `/friends/all/${localStorage.getItem("userID")}`
-      );
-      setUserFriends(res.data);
-    };
+    setUserFriends(user.friends);
 
     getAllPosts();
-    getUserFriends();
-  }, [user.userID]);
+  }, [user]);
 
   return (
     <Container>
@@ -86,7 +80,7 @@ function Home() {
         ))}
       </HomeLeft>
       <HomeRight>
-        {isAuthenticated && userFriends.length > 0 ? (
+        {isAuthenticated && userFriends?.length > 0 ? (
           <FriendsBox>
             <Title>Your Friends</Title>
             {userFriends?.map((friend, index) => (
