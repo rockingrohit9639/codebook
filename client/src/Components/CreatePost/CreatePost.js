@@ -70,11 +70,12 @@ import { THEMES, LANGUAGES, defaultCodes } from "../../utils/constants";
 import { componentToImage } from "../../utils/componentToImage";
 import { handleBase64Upload } from "../../utils/handleBase64Upload";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import server from "../../axios/instance";
 import Loading from "../Loading/Loading";
+import { addNewPost } from "../../redux/postsRedux";
 
 const Container = styled.div`
   width: 100%;
@@ -218,6 +219,8 @@ function CreatePost() {
   const [showNumberLine, setShowNumberLine] = useState(false);
   // States
 
+  const dispatch = useDispatch();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const settingMenuOpen = Boolean(anchorEl);
 
@@ -306,11 +309,12 @@ function CreatePost() {
 
       // Addind post data on server
       const res = await server.post("/posts/create", data);
+      console.log(res.data);
 
       if (res.status === 200) {
-        toast.success("Post created successfully");
+        dispatch(addNewPost(res.data));
         setPostTitle("");
-        // setEditorValue(defaultCode);
+        setLoading(false);
         navigate("/");
       }
     } catch (err) {
