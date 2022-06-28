@@ -21,6 +21,12 @@ const userSlice = createSlice({
     updateUserDetails: (state, action) => {
       state.user = { ...state.user, ...action.payload };
     },
+    setUserFriends: (state, action) => {
+      state.user.friends = action.payload;
+    },
+    setUserPosts: (state, action) => {
+      state.user.posts = action.payload;
+    },
     logout: (state) => {
       state.isAuthenticated = false;
       state.user = {};
@@ -34,5 +40,7 @@ export const {
   logout,
   setUserProfilePhoto,
   updateUserDetails,
+  setUserFriends,
+  setUserPosts
 } = userSlice.actions;
 export default userSlice.reducer;
