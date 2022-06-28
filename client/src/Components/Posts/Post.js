@@ -90,6 +90,7 @@ function Post({ post }) {
 
         if (res.status === 200) {
           dispatch(deletePost(post.postID));
+          setAnchorEl(null);
         } else {
           toast.error("Error deleting post");
         }
@@ -120,19 +121,19 @@ function Post({ post }) {
       <Header>
         <HeaderLeft>
           <Avatar
-            alt={post.user.username}
-            src={post.user.photoURL !== null ? post.user.photoURL : ""}
+            alt={post?.user.username}
+            src={post?.user.photoURL !== null ? post?.user.photoURL : ""}
           />
           <AuthorContainer>
             <AuthorName
               onClick={() => navigate(`/profile/${post.user.userID}`)}
             >
-              {post.user.username}
+              {post?.user?.username}
             </AuthorName>
-            <Time>{moment(post.createdAt).fromNow()}</Time>
+            <Time>{moment(post?.createdAt).fromNow()}</Time>
           </AuthorContainer>
         </HeaderLeft>
-        {user?.userID === post.user.userID && (
+        {user?.userID === post?.user?.userID && (
           <>
             <HeaderRight
               aria-controls={open ? "basic-menu" : undefined}
