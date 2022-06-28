@@ -216,7 +216,6 @@ function CreatePost() {
   const [postTitle, setPostTitle] = useState("");
   const [loading, setLoading] = useState(false);
   const [showNumberLine, setShowNumberLine] = useState(false);
-  console.log(showNumberLine);
   // States
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -329,12 +328,14 @@ function CreatePost() {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    const token = JSON.parse(localStorage.getItem("@ttookk"));
+
+    if (!token) {
       return navigate("/login");
     }
 
     setDefaultCode();
-  }, [isAuthenticated, navigate, setDefaultCode]);
+  }, [navigate, setDefaultCode]);
 
   return (
     <Container>
