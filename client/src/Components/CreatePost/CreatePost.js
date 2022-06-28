@@ -68,7 +68,7 @@ import {
 import Dropdown from "../Dropdown/Dropdown";
 import { THEMES, LANGUAGES, defaultCodes } from "../../utils/constants";
 import { componentToImage } from "../../utils/componentToImage";
-import { handleBase64Upload } from "../../utils/handleBase64Upload";
+import { handleBase64Upload } from "../../utils/firebase";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";

@@ -10,7 +10,7 @@ import { styled } from "@mui/material/styles";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import Friend from "../Friend/Friend";
-import { handleProfilePhotoUpload } from "../../utils/handleProfilePhotoUpload";
+import { handleProfilePhotoUpload } from "../../utils/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import Box from "@mui/material/Box";
