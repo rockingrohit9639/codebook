@@ -309,7 +309,6 @@ function CreatePost() {
 
       // Addind post data on server
       const res = await server.post("/posts/create", data);
-      console.log(res.data);
 
       if (res.status === 200) {
         dispatch(addNewPost(res.data));
