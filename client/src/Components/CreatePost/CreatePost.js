@@ -442,7 +442,7 @@ function CreatePost() {
             />
             <Theme
               src="/assets/themes/5.png"
-              onClick={() => handleSetDeaultTheme("the-metrix", "#7948B9")}
+              onClick={() => handleSetDeaultTheme("the-matrix", "#7948B9")}
             />
           </DefaultThemes>
 
