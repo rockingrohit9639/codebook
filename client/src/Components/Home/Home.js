@@ -52,20 +52,13 @@ const Title = styled.h1`
 `;
 
 function Home() {
-  const [allPosts, setAllPosts] = useState([]);
+  const { allPosts } = useSelector((state) => state.posts);
   const navigate = useNavigate();
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const [userFriends, setUserFriends] = useState([]);
 
   useEffect(() => {
-    const getAllPosts = async () => {
-      const res = await server.get("/posts/getAllPosts");
-      setAllPosts(res.data);
-    };
-
     setUserFriends(user.friends);
-
-    getAllPosts();
   }, [user]);
 
   return (

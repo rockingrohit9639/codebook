@@ -15,6 +15,7 @@ import Profile from "./Components/Profile/Profile";
 import CreatePost from "./Components/CreatePost/CreatePost";
 import server from "./axios/instance";
 import Home from "./Components/Home/Home";
+import { setAllPosts } from "./redux/postsRedux";
 
 function App() {
   const dispatch = useDispatch();
@@ -22,16 +23,26 @@ function App() {
   const userID = localStorage.getItem("userID");
 
   useEffect(() => {
-    const getUserInfo = async () => {
-      const userInfo = await server.get(`/users/details/${JSON.parse(userID)}`);
-      dispatch(setUser(userInfo.data));
-      dispatch(setUserFriends(userInfo.data.friends));
-      dispatch(setUserPosts(userInfo.data.posts));
+    const getBasicInfo = async () => {
+      try {
+        const userInfo = await server.get(
+          `/users/details/${JSON.parse(userID)}`
+        );
+        dispatch(setUser(userInfo.data));
+        dispatch(setUserFriends(userInfo.data.friends));
+        dispatch(setUserPosts(userInfo.data.posts));
+
+        const posts = await server.get("/posts/getAllPosts");
+        dispatch(setAllPosts(posts.data));
+      } catch (err) {
+        console.log(err);
+      }
     };
+
     if (localStorage.getItem("@ttookk")) {
       dispatch(setAuth(true));
       server.defaults.headers["token"] = `Bearer ${JSON.parse(token)}`;
-      getUserInfo();
+      getBasicInfo();
     } else {
       dispatch(setAuth(false));
     }
