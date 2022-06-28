@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import server from "../../axios/instance";
 import Friend from "../Friend/Friend";
 import Post from "../Posts/Post";
 
