@@ -4,7 +4,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./Components/Login/Login";
 import Navbar from "./Components/Navbar/Navbar";
 import Signup from "./Components/Signup/Signup";
-import { setAuth, setUser } from "./redux/userRedux";
+import {
+  setAuth,
+  setUser,
+  setUserFriends,
+  setUserPosts,
+} from "./redux/userRedux";
 import Logout from "./Components/Logout/Logout";
 import Profile from "./Components/Profile/Profile";
 import CreatePost from "./Components/CreatePost/CreatePost";
@@ -19,8 +24,9 @@ function App() {
   useEffect(() => {
     const getUserInfo = async () => {
       const userInfo = await server.get(`/users/details/${JSON.parse(userID)}`);
-
       dispatch(setUser(userInfo.data));
+      dispatch(setUserFriends(userInfo.data.friends));
+      dispatch(setUserPosts(userInfo.data.posts));
     };
     if (localStorage.getItem("@ttookk")) {
       dispatch(setAuth(true));
