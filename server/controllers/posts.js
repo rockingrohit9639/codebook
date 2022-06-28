@@ -13,7 +13,7 @@ const createPost = async (req, res) => {
     return res.status(403).json({ message: "Post title is required." });
   }
   try {
-    const post = await Posts.create({
+    let post = await Posts.create({
       postTitle: req.body.postTitle,
       imgURL: req.body.imgURL,
       userID: req.userID,
@@ -22,6 +22,10 @@ const createPost = async (req, res) => {
     if (!post) {
       return res.status(401).json({ message: "Could not create the post." });
     }
+
+    const user = await post.getUser();
+
+    post = { ...post.dataValues, user };
 
     return res.status(200).json(post);
   } catch (err) {
