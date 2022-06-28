@@ -200,7 +200,7 @@ function Profile() {
   const [imageLoading, setImageLoading] = useState(false);
   const { user } = useSelector((state) => state.user);
   const { userID } = useParams();
-  
+
   const dispatch = useDispatch();
 
   const [userProfile, setUserProfile] = useState({});
@@ -215,21 +215,16 @@ function Profile() {
     const getUserProfile = async () => {
       if (userID === localStorage.getItem("userID")) {
         setUserProfile(user);
+        setUserFriends(user.friends);
       } else {
         // Getting user profile
         const res = await server.get(`/users/details/${userID}`);
         setUserProfile(res.data);
+        setUserFriends(res.data.friends);
       }
     };
 
-    // Getting user friends
-    const getUserFriends = async () => {
-      const res = await server.get(`/friends/all/${userID}`);
-      setUserFriends(res.data);
-    };
-
     getUserProfile();
-    getUserFriends();
 
     setDob(userProfile.dob);
     setWebsite(userProfile.website);
@@ -513,7 +508,7 @@ function Profile() {
 
         <TabPanel value="two">
           <Friends>
-            {userFriends.length > 0 ? (
+            {userFriends?.length > 0 ? (
               userFriends?.map((friend, index) => (
                 <Friend key={index} friend={friend} />
               ))
