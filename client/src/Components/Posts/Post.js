@@ -7,6 +7,13 @@ import CommentIcon from "@mui/icons-material/Comment";
 import ShareIcon from "@mui/icons-material/Share";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { ToastContainer, toast } from "react-toastify";
+import { deletePost } from "../../redux/postsRedux";
+import server from "../../axios/instance";
 
 const PostContainer = styled.div`
   max-width: 100%;
@@ -60,8 +67,56 @@ const PostBottom = styled.div`
 
 function Post({ post }) {
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDeletePost = async () => {
+    const userRes = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
+
+    if (userRes) {
+      try {
+        const res = await server.delete(`/posts/deletePost/${post.postID}`);
+
+        if (res.status === 200) {
+          dispatch(deletePost(post.postID));
+        } else {
+          toast.error("Error deleting post");
+        }
+      } catch (err) {
+        if (err.response) {
+        }
+        console.log(err);
+      }
+    } else {
+      setAnchorEl(null);
+      return null;
+    }
+  };
+
   return (
     <PostContainer>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Header>
         <HeaderLeft>
           <Avatar
@@ -77,9 +132,32 @@ function Post({ post }) {
             <Time>{moment(post.createdAt).fromNow()}</Time>
           </AuthorContainer>
         </HeaderLeft>
-        <HeaderRight>
-          <MoreHorizIcon style={{ cursor: "pointer" }} />
-        </HeaderRight>
+        {user?.userID === post.user.userID && (
+          <>
+            <HeaderRight
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+            >
+              <MoreHorizIcon style={{ cursor: "pointer" }} />
+            </HeaderRight>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem onClick={handleDeletePost} disableRipple>
+                <DeleteIcon />
+                Delete Post
+              </MenuItem>
+            </Menu>
+          </>
+        )}
       </Header>
 
       <Content>
