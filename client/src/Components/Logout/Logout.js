@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logout, setAuth } from "../../redux/userRedux";
+import { setAuth, setUser } from "../../redux/userRedux";
 
 function Logout() {
   const dispatch = useDispatch();
@@ -10,9 +10,9 @@ function Logout() {
   useEffect(() => {
     localStorage.clear();
     dispatch(setAuth(false));
-    dispatch(logout());
+    dispatch(setUser({}));
     navigate("/login");
-  });
+  }, [dispatch, navigate]);
 
   return <div></div>;
 }
