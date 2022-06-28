@@ -45,6 +45,11 @@ import "codemirror/mode/sql/sql";
 import "codemirror/mode/markdown/markdown";
 // Importing Languages
 
+// Codemirror Addons
+import "codemirror/keymap/sublime";
+import "codemirror/addon/comment/comment";
+// Codemirror Addons
+
 // Material UI Imports
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LanguageIcon from "@mui/icons-material/Language";
@@ -57,7 +62,7 @@ import {
   FormGroup,
   Menu as MuiMenu,
 } from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
+// import MenuItem from "@mui/material/MenuItem";
 // Material UI Imports
 
 import Dropdown from "../Dropdown/Dropdown";
@@ -482,6 +487,7 @@ function CreatePost() {
               readOnly: false,
               showInvisibles: false,
               autoCloseBrackets: true,
+              keyMap: "sublime",
             }}
             onBeforeChange={(editor, data, value) => {
               setEditorValue(value);
