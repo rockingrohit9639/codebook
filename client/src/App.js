@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./Components/Login/Login";
 import Navbar from "./Components/Navbar/Navbar";
@@ -21,6 +21,7 @@ function App() {
   const dispatch = useDispatch();
   const token = localStorage.getItem("@ttookk");
   const userID = localStorage.getItem("userID");
+  const { isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
     const getBasicInfo = async () => {
@@ -46,7 +47,7 @@ function App() {
     } else {
       dispatch(setAuth(false));
     }
-  }, [token, dispatch, userID]);
+  }, [token, dispatch, userID, isAuthenticated]);
 
   return (
     <div className="App">
