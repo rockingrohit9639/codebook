@@ -16,6 +16,7 @@
     "axios": "^0.26.1",
     "codemirror": "^5.65.6",
     "firebase": "^9.8.4",
+    "framer-motion": "^6.3.16",
     "highlight.js": "^11.5.1",
     "html2canvas": "^1.4.1",
     "moment": "^2.29.3",

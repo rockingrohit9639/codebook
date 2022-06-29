@@ -15,8 +15,9 @@ import { ToastContainer, toast } from "react-toastify";
 import { deletePost } from "../../redux/postsRedux";
 import server from "../../axios/instance";
 import { handlePostImageDelete } from "../../utils/firebase";
+import { motion } from "framer-motion";
 
-const PostContainer = styled.div`
+const PostContainer = styled(motion.div)`
   max-width: 100%;
   background: #fff;
   border-radius: 10px;
@@ -108,7 +109,11 @@ function Post({ post }) {
   };
 
   return (
-    <PostContainer>
+    <PostContainer
+      layout
+      initial={{ y: "-300px", opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+    >
       <ToastContainer
         position="top-right"
         autoClose={5000}

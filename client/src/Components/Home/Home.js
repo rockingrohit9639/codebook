@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Friend from "../Friend/Friend";
 import Post from "../Posts/Post";
+import { motion } from "framer-motion";
 
 const Container = styled.div`
   width: 100%;
@@ -50,6 +51,8 @@ const Title = styled.h1`
   margin-bottom: 1rem;
 `;
 
+const AllPosts = styled(motion.div)``;
+
 function Home() {
   const { allPosts } = useSelector((state) => state.posts);
   const navigate = useNavigate();
@@ -67,9 +70,11 @@ function Home() {
           Add New Code
         </AddPostButton>
 
-        {allPosts.map((post, index) => (
-          <Post key={index} post={post} />
-        ))}
+        <AllPosts layout>
+          {allPosts.map((post, index) => (
+            <Post key={index} post={post} />
+          ))}
+        </AllPosts>
       </HomeLeft>
       <HomeRight>
         {isAuthenticated && userFriends?.length > 0 ? (
