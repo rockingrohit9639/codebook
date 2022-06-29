@@ -54,6 +54,11 @@ const Content = styled.div`
   width: 100%;
 `;
 
+const PostTitle = styled.p`
+  font-size: 1rem;
+  padding: 1rem 2rem;
+`;
+
 const Image = styled.img`
   width: 100%;
   height: 100%;
@@ -169,6 +174,7 @@ function Post({ post }) {
       </Header>
 
       <Content>
+        <PostTitle>{post.postTitle}</PostTitle>
         <Image src={post.imgURL || "/assets/images/logo.png"} alt="post" />
       </Content>
 
