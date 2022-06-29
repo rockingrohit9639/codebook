@@ -132,10 +132,7 @@ function Post({ post }) {
       />
       <Header>
         <HeaderLeft>
-          <Avatar
-            alt={post?.user.username}
-            src={post?.user.photoURL !== null ? post?.user.photoURL : ""}
-          />
+          <Avatar alt={post?.user.username} src={post?.user.photoURL || "/assets/images/logo.png"} />
           <AuthorContainer>
             <AuthorName
               onClick={() => navigate(`/profile/${post.user.userID}`)}
