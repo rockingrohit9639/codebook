@@ -1,15 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import Avatar from "@mui/material/Avatar";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import CommentIcon from "@mui/icons-material/Comment";
 import ShareIcon from "@mui/icons-material/Share";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ToastContainer, toast } from "react-toastify";
 import { deletePost } from "../../redux/postsRedux";
@@ -147,7 +144,7 @@ function Post({ post }) {
         {user?.userID === post?.user?.userID && (
           <HeaderRight>
             <DeleteButton onClick={handleDeletePost}>
-              <DeleteIcon style={{ color : "#FF0000"}} />
+              <DeleteIcon style={{ color: "#FF0000" }} />
             </DeleteButton>
           </HeaderRight>
         )}
