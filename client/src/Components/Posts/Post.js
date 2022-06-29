@@ -72,19 +72,20 @@ const PostBottom = styled.div`
   gap: 1rem;
 `;
 
+const DeleteButton = styled.button`
+  border: none;
+  outline: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: #fad4d4;
+`;
+
 function Post({ post }) {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const handleDeletePost = async () => {
     const userRes = window.confirm(
@@ -96,7 +97,6 @@ function Post({ post }) {
         const res = await server.delete(`/posts/deletePost/${post.postID}`);
 
         if (res.status === 200) {
-          setAnchorEl(null);
           dispatch(deletePost(post.postID));
           await handlePostImageDelete(post.imgURL);
         } else {
@@ -108,7 +108,6 @@ function Post({ post }) {
         console.log(err);
       }
     } else {
-      setAnchorEl(null);
       return null;
     }
   };
@@ -132,7 +131,10 @@ function Post({ post }) {
       />
       <Header>
         <HeaderLeft>
-          <Avatar alt={post?.user.username} src={post?.user.photoURL || "/assets/images/logo.png"} />
+          <Avatar
+            alt={post?.user.username}
+            src={post?.user.photoURL || "/assets/images/logo.png"}
+          />
           <AuthorContainer>
             <AuthorName
               onClick={() => navigate(`/profile/${post.user.userID}`)}
@@ -143,30 +145,11 @@ function Post({ post }) {
           </AuthorContainer>
         </HeaderLeft>
         {user?.userID === post?.user?.userID && (
-          <>
-            <HeaderRight
-              aria-controls={open ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-            >
-              <MoreHorizIcon style={{ cursor: "pointer" }} />
-            </HeaderRight>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <MenuItem onClick={handleDeletePost} disableRipple>
-                <DeleteIcon />
-                Delete Post
-              </MenuItem>
-            </Menu>
-          </>
+          <HeaderRight>
+            <DeleteButton onClick={handleDeletePost}>
+              <DeleteIcon style={{ color : "#FF0000"}} />
+            </DeleteButton>
+          </HeaderRight>
         )}
       </Header>
 
