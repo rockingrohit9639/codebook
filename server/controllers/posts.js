@@ -36,7 +36,7 @@ const createPost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
   try {
-    const allPosts = await Posts.findAll({
+    let allPosts = await Posts.findAll({
       include: [
         {
           model: Users,
@@ -44,6 +44,11 @@ const getAllPosts = async (req, res) => {
         },
       ],
     });
+
+    allPosts = allPosts.sort(
+      (a, b) =>
+        Date.parse(new Date(b.createdAt)) - Date.parse(new Date(a.createdAt))
+    );
 
     return res.status(200).json(allPosts);
   } catch (err) {
