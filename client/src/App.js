@@ -33,8 +33,13 @@ function App() {
         dispatch(setUserFriends(userInfo.data.friends));
         dispatch(setUserPosts(userInfo.data.posts));
 
-        const posts = await server.get("/posts/getAllPosts");
-        dispatch(setAllPosts(posts.data));
+        const { data } = await server.get("/posts/getAllPosts");
+        const posts = data.sort(
+          (a, b) =>
+            Date.parse(new Date(b.createdAt)) -
+            Date.parse(new Date(a.createdAt))
+        );
+        dispatch(setAllPosts(posts));
       } catch (err) {
         console.log(err);
       }

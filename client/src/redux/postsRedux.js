@@ -12,7 +12,7 @@ const postsSlice = createSlice({
       state.allPosts = action.payload;
     },
     addNewPost: (state, action) => {
-      state.allPosts.push(action.payload);
+      state.allPosts.unshift(action.payload);
     },
     deletePost: (state, action) => {
       state.allPosts = state.allPosts.filter(
