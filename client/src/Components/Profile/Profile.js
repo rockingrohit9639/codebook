@@ -17,9 +17,13 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import server from "../../axios/instance";
 import { CircularProgress } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { setUserProfilePhoto, updateUserDetails } from "../../redux/userRedux";
 import Dropdown from "../Dropdown/Dropdown";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import AddIcon from '@mui/icons-material/Add';
+import { handleFriendshipStatus } from "../../utils/utils";
 
 const ProfileComponent = styledComponents.div``;
 
@@ -47,6 +51,9 @@ const ProfileInfoCenter = styledComponents.div`
 
 const ProfileInfoRight = styledComponents.div`
   flex: 20%;
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
 `;
 
 const ProfileName = styledComponents.h2`
@@ -193,6 +200,20 @@ const NoFriends = styledComponents.h2`
   font-size: 1.5rem;
 `;
 
+const FriendButton = styledComponents.button`
+  border: none;
+  outline: none;
+  padding: 0.54rem 1.3rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: var(--primary-color);
+  color: #fff;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
 function Profile() {
   const [bgColor, setBgColor] = useState("");
   const [open, setOpen] = useState(false);
@@ -211,26 +232,42 @@ function Profile() {
   const [bio, setBio] = useState("");
   const [gender, setGender] = useState("");
 
+  const navigate = useNavigate();
+
+  const [friendship, setFriendship] = useState(null);
+
   useEffect(() => {
     const getUserProfile = async () => {
       if (userID === localStorage.getItem("userID")) {
         setUserProfile(user);
         setUserFriends(user.friends);
+        const fship = handleFriendshipStatus(user.friends);
+        setFriendship(fship);
       } else {
         // Getting user profile
         const res = await server.get(`/users/details/${userID}`);
         setUserProfile(res.data);
         setUserFriends(res.data.friends);
+        const fship = handleFriendshipStatus(res.data.friends);
+        setFriendship(fship);
       }
     };
 
-    getUserProfile();
+    const token = JSON.parse(localStorage.getItem("@ttookk"));
 
-    setDob(userProfile.dob);
-    setWebsite(userProfile.website);
-    setBio(userProfile.bio);
-    setGender(userProfile.gender);
-  }, [userID, user, userProfile]);
+    if (!token) {
+      navigate("/login");
+      return;
+    } else {
+      getUserProfile();
+
+      setDob(userProfile.dob);
+      setWebsite(userProfile.website);
+      setBio(userProfile.bio);
+      setGender(userProfile.gender);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigate, userID, user]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -370,11 +407,33 @@ function Profile() {
           <ProfileEmail>{userProfile?.email}</ProfileEmail>
           <ProfileBio>{userProfile?.bio}</ProfileBio>
         </ProfileInfoCenter>
-        {user.userID === userProfile?.userID && (
-          <ProfileInfoRight>
+
+        <ProfileInfoRight>
+          {user.userID === userProfile?.userID && (
             <Button onClick={() => setOpen(true)}>Edit Profile</Button>
-          </ProfileInfoRight>
-        )}
+          )}
+
+          {friendship?.status === 1 && (
+            <FriendButton style={{ backgroundColor: "red" }}>
+              <PersonRemoveIcon />
+              Remove Friend
+            </FriendButton>
+          )}
+
+          {friendship?.status === 0 && (
+            <FriendButton style={{ backgroundColor: "green" }}>
+              <PersonAddIcon />
+              Accept Friend Request
+            </FriendButton>
+          )}
+
+          {!friendship  && (
+            <FriendButton>
+              <AddIcon />
+              Add Friend
+            </FriendButton>
+          )}
+        </ProfileInfoRight>
       </ProfileInfo>
 
       <Modal
