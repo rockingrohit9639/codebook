@@ -1,4 +1,9 @@
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](gitpod.io/#https://github.com/rockingrohit9639/codebook/tree/master])
+<a href="https://gitpod.io/#https://github.com/rockingrohit9639/codebook/tree/master">
+  <img
+    src="https://gitpod.io/button/open-in-gitpod.svg"
+    alt="Open in Gitpod"
+  />
+</a>
 
 # Codebook
 
