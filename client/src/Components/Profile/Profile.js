@@ -22,7 +22,7 @@ import { setUserProfilePhoto, updateUserDetails } from "../../redux/userRedux";
 import Dropdown from "../Dropdown/Dropdown";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import { handleFriendshipStatus } from "../../utils/utils";
 
 const ProfileComponent = styledComponents.div``;
@@ -240,14 +240,16 @@ function Profile() {
     const getUserProfile = async () => {
       if (userID === localStorage.getItem("userID")) {
         setUserProfile(user);
-        setUserFriends(user.friends);
+        setUserFriends(user.friends.filter((friend) => friend.status === 1));
         const fship = handleFriendshipStatus(user.friends);
         setFriendship(fship);
       } else {
         // Getting user profile
         const res = await server.get(`/users/details/${userID}`);
         setUserProfile(res.data);
-        setUserFriends(res.data.friends);
+        setUserFriends(
+          res.data.friends.filter((friend) => friend.status === 1)
+        );
         const fship = handleFriendshipStatus(res.data.friends);
         setFriendship(fship);
       }
@@ -421,13 +423,19 @@ function Profile() {
           )}
 
           {friendship?.status === 0 && (
-            <FriendButton style={{ backgroundColor: "green" }}>
-              <PersonAddIcon />
-              Accept Friend Request
-            </FriendButton>
+            <>
+              <FriendButton style={{ backgroundColor: "green" }}>
+                <PersonAddIcon />
+                Accept Friend Request
+              </FriendButton>
+              <FriendButton style={{ backgroundColor: "grey " }}>
+                <PersonAddIcon />
+                Reject Friend Request
+              </FriendButton>
+            </>
           )}
 
-          {!friendship  && (
+          {!friendship && (
             <FriendButton>
               <AddIcon />
               Add Friend
@@ -572,7 +580,7 @@ function Profile() {
                 <Friend key={index} friend={friend} />
               ))
             ) : (
-              <NoFriends>You have no friends.</NoFriends>
+              <NoFriends>User have no friends.</NoFriends>
             )}
           </Friends>
         </TabPanel>
