@@ -19,7 +19,7 @@ const getUserDetails = async (req, res) => {
           { senderID: req.params.userid },
           { receiverID: req.params.userid },
         ],
-        status: 1,
+        [Op.or]: [{ status: 1 }, { status: 0 }],
       },
       attributes: {
         exclude: ["createdAt", "updatedAt"],
@@ -39,11 +39,22 @@ const getUserDetails = async (req, res) => {
     });
 
     const friends = [];
+
     for (let fr of allFriends) {
       if (fr.dataValues.receiver.dataValues.userID == req.params.userid) {
-        friends.push(fr.dataValues.sender.dataValues);
+        const newFriend = {
+          ...fr.dataValues.sender.dataValues,
+          status: fr.dataValues.status,
+          friendshipID: fr.dataValues.friendshipID,
+        };
+        friends.push(newFriend);
       } else {
-        friends.push(fr.dataValues.receiver.dataValues);
+        const newFriend = {
+          ...fr.dataValues.receiver.dataValues,
+          status: fr.dataValues.status,
+          friendshipID: fr.dataValues.friendshipID,
+        };
+        friends.push(newFriend);
       }
     }
 
