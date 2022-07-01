@@ -24,6 +24,9 @@ const userSlice = createSlice({
     setUserFriends: (state, action) => {
       state.user.friends = action.payload;
     },
+    updateUserFriends: (state, action) => {
+      state.user.friends = [...state.user.friends, action.payload];
+    },
     setUserPosts: (state, action) => {
       state.user.posts = action.payload;
     },
@@ -41,6 +44,7 @@ export const {
   setUserProfilePhoto,
   updateUserDetails,
   setUserFriends,
-  setUserPosts
+  setUserPosts,
+  updateUserFriends,
 } = userSlice.actions;
 export default userSlice.reducer;

@@ -18,7 +18,11 @@ import Typography from "@mui/material/Typography";
 import server from "../../axios/instance";
 import { CircularProgress } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { setUserProfilePhoto, updateUserDetails } from "../../redux/userRedux";
+import {
+  setUserProfilePhoto,
+  updateUserDetails,
+  updateUserFriends,
+} from "../../redux/userRedux";
 import Dropdown from "../Dropdown/Dropdown";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -241,8 +245,8 @@ function Profile() {
     const getUserProfile = async () => {
       if (userID === localStorage.getItem("userID")) {
         setUserProfile(user);
-        setUserFriends(user.friends.filter((friend) => friend.status === 1));
-        const fship = handleFriendshipStatus(user.friends);
+        setUserFriends(user?.friends?.filter((friend) => friend.status === 1));
+        const fship = handleFriendshipStatus(user.friends, userID);
         setFriendship(fship);
       } else {
         // Getting user profile
@@ -251,7 +255,7 @@ function Profile() {
         setUserFriends(
           res.data.friends.filter((friend) => friend.status === 1)
         );
-        const fship = handleFriendshipStatus(res.data.friends);
+        const fship = handleFriendshipStatus(res.data.friends, userID);
         setFriendship(fship);
       }
     };
@@ -411,6 +415,18 @@ function Profile() {
         setFriendship((prevFriendship) => {
           return { ...prevFriendship, status: 1 };
         });
+
+        setUserFriends((prevFriends) => {
+          return [...prevFriends, friendship];
+        });
+        dispatch(
+          updateUserFriends({
+            userID,
+            username: userProfile.username,
+            photoURL: userProfile.photoURL,
+            status: 1,
+          })
+        );
       } else {
         toast.error("Something went wrong.");
       }
@@ -494,7 +510,7 @@ function Profile() {
               </>
             ))}
 
-          {!friendship && (
+          {!friendship && parseInt(userID) !== user?.userID && (
             <FriendButton onClick={handleSendFriendRequest}>
               <AddIcon />
               Add Friend
