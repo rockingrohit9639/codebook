@@ -6,7 +6,7 @@ const Users = db.users;
 
 // Friends
 const createFriendRequest = async (req, res) => {
-  var status = req.body.status;
+  let status = req.body.status;
 
   if (!req.body.receiverID) {
     return res.status(404).json({ message: "Receiver not found." });
@@ -33,7 +33,7 @@ const createFriendRequest = async (req, res) => {
       return res.status(404).json({ message: "Receiver not found." });
     }
 
-    const request = await Friendships.create({
+    const request = await Friends.create({
       status: status,
       senderID: req.userID,
       receiverID: req.body.receiverID,
@@ -43,7 +43,11 @@ const createFriendRequest = async (req, res) => {
       return res.status(403).json({ message: "Could not send the request." });
     }
 
-    return res.status(200).json({ message: "Request sent successfully." });
+    const data = { ...request.dataValues, type: "sender" };
+
+    return res
+      .status(200)
+      .json({ message: "Request sent successfully.", body: data });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Internal Server Error!" });
@@ -103,13 +107,14 @@ const getAllFriends = async (req, res) => {
     });
 
     const friends = [];
-    
+
     for (let fr of allFriends) {
       if (fr.dataValues.receiver.dataValues.userID == req.params.userid) {
         const newFriend = {
           ...fr.dataValues.sender.dataValues,
           status: fr.dataValues.status,
           friendshipID: fr.dataValues.friendshipID,
+          type: "sender",
         };
         friends.push(newFriend);
       } else {
@@ -117,6 +122,7 @@ const getAllFriends = async (req, res) => {
           ...fr.dataValues.receiver.dataValues,
           status: fr.dataValues.status,
           friendshipID: fr.dataValues.friendshipID,
+          type: "reciever",
         };
         friends.push(newFriend);
       }

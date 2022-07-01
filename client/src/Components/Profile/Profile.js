@@ -23,6 +23,7 @@ import Dropdown from "../Dropdown/Dropdown";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AddIcon from "@mui/icons-material/Add";
+import CancelIcon from '@mui/icons-material/Cancel';
 import { handleFriendshipStatus } from "../../utils/utils";
 
 const ProfileComponent = styledComponents.div``;
@@ -236,6 +237,8 @@ function Profile() {
 
   const [friendship, setFriendship] = useState(null);
 
+  console.log(friendship);
+
   useEffect(() => {
     const getUserProfile = async () => {
       if (userID === localStorage.getItem("userID")) {
@@ -372,6 +375,31 @@ function Profile() {
     }
   };
 
+  const handleSendFriendRequest = async () => {
+    if (friendship) {
+      toast.error(
+        "You are already friends with this user. There is something wrong with UI."
+      );
+      return;
+    }
+
+    try {
+      const res = await server.post("/friends/friendRequest", {
+        receiverID: userID,
+      });
+
+      if (res.status === 200) {
+        setFriendship(res.data.body);
+        toast.success(res.data.message);
+      }
+    } catch (err) {
+      if (err.response) {
+        toast.error(err.response.data.message);
+      }
+      console.log(err);
+    }
+  };
+
   return (
     <ProfileComponent>
       <ToastContainer
@@ -422,21 +450,27 @@ function Profile() {
             </FriendButton>
           )}
 
-          {friendship?.status === 0 && (
-            <>
-              <FriendButton style={{ backgroundColor: "green" }}>
-                <PersonAddIcon />
-                Accept Friend Request
+          {friendship?.status === 0 &&
+            (friendship.type === "sender" ? (
+              <FriendButton style={{ backgroundColor: "red" }}>
+                <CancelIcon />
+                Cancel Friend Request
               </FriendButton>
-              <FriendButton style={{ backgroundColor: "grey " }}>
-                <PersonAddIcon />
-                Reject Friend Request
-              </FriendButton>
-            </>
-          )}
+            ) : (
+              <>
+                <FriendButton style={{ backgroundColor: "green" }}>
+                  <PersonAddIcon />
+                  Accept Friend Request
+                </FriendButton>
+                <FriendButton style={{ backgroundColor: "grey " }}>
+                  <PersonAddIcon />
+                  Reject Friend Request
+                </FriendButton>
+              </>
+            ))}
 
           {!friendship && (
-            <FriendButton>
+            <FriendButton onClick={handleSendFriendRequest}>
               <AddIcon />
               Add Friend
             </FriendButton>

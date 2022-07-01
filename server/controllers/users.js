@@ -46,6 +46,7 @@ const getUserDetails = async (req, res) => {
           ...fr.dataValues.sender.dataValues,
           status: fr.dataValues.status,
           friendshipID: fr.dataValues.friendshipID,
+          type: "sender",
         };
         friends.push(newFriend);
       } else {
@@ -53,6 +54,7 @@ const getUserDetails = async (req, res) => {
           ...fr.dataValues.receiver.dataValues,
           status: fr.dataValues.status,
           friendshipID: fr.dataValues.friendshipID,
+          type: "receiver",
         };
         friends.push(newFriend);
       }
