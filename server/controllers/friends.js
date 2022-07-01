@@ -54,12 +54,9 @@ const createFriendRequest = async (req, res) => {
   }
 };
 
-const updateFriendRequest = async (req, res) => {
-  if (!req.body.status) {
-    return res.status(400).json({ message: "Status not provided." });
-  }
+const acceptFriendRequest = async (req, res) => {
   try {
-    const request = await Friendships.findOne({
+    const request = await Friends.findOne({
       where: {
         friendshipID: req.params.requestID,
       },
@@ -69,8 +66,12 @@ const updateFriendRequest = async (req, res) => {
       return res.status(404).json({ message: "Request not found." });
     }
 
-    request.status = req.body.status;
-    await request.save();
+    if (req.userID === request.dataValues.receiverID) {
+      request.status = 1;
+      await request.save();
+    } else {
+      return res.status(400).json({ message: "You are not the receiver!" });
+    }
 
     return res.status(200).json({ message: "Request updated success." });
   } catch (err) {
@@ -160,7 +161,7 @@ const deleteFriends = async (req, res) => {
 
 module.exports = {
   createFriendRequest,
-  updateFriendRequest,
+  acceptFriendRequest,
   getAllFriends,
   deleteFriends,
 };

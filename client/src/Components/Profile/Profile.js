@@ -23,7 +23,7 @@ import Dropdown from "../Dropdown/Dropdown";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from '@mui/icons-material/Cancel';
+import CancelIcon from "@mui/icons-material/Cancel";
 import { handleFriendshipStatus } from "../../utils/utils";
 
 const ProfileComponent = styledComponents.div``;
@@ -237,8 +237,6 @@ function Profile() {
 
   const [friendship, setFriendship] = useState(null);
 
-  console.log(friendship);
-
   useEffect(() => {
     const getUserProfile = async () => {
       if (userID === localStorage.getItem("userID")) {
@@ -400,6 +398,30 @@ function Profile() {
     }
   };
 
+  const handleAcceptReqeust = async () => {
+    if (!friendship) {
+      toast.error("Request is not valid.");
+      return;
+    }
+    try {
+      const res = await server.post(
+        `/friends/friendRequest/accept/${friendship.friendshipID}`
+      );
+      if (res.status === 200) {
+        setFriendship((prevFriendship) => {
+          return { ...prevFriendship, status: 1 };
+        });
+      } else {
+        toast.error("Something went wrong.");
+      }
+    } catch (err) {
+      if (err.response) {
+        toast.error(err.response.data.message);
+      }
+      console.log(err);
+    }
+  };
+
   return (
     <ProfileComponent>
       <ToastContainer
@@ -458,7 +480,10 @@ function Profile() {
               </FriendButton>
             ) : (
               <>
-                <FriendButton style={{ backgroundColor: "green" }}>
+                <FriendButton
+                  style={{ backgroundColor: "green" }}
+                  onClick={handleAcceptReqeust}
+                >
                   <PersonAddIcon />
                   Accept Friend Request
                 </FriendButton>
