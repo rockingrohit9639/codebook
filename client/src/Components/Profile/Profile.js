@@ -31,13 +31,14 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import LanguageIcon from "@mui/icons-material/Language";
 import { handleFriendshipStatus } from "../../utils/utils";
 import Post from "../Posts/Post";
+import FriendRequest from "../FriendRequest/FriendRequest";
 
 const ProfileComponent = styledComponents.div``;
 
 const ProfileBg = styledComponents.div`
   width: 100%;
   height: 20vh;
-  background-color: ${(props) => props.bgColor || "#fff"};
+  background-color: ${(props) => props.bgColor || "green"};
 `;
 
 const ProfileInfo = styledComponents.div`
@@ -124,16 +125,6 @@ const RowHead = styledComponents.h3``;
 
 const RowItem = styledComponents.div``;
 
-const FriendRequestButton = styledComponents.button`
-  width: 100%;
-  margin-top: 1rem;
-  border: none;
-  padding: 0.8rem 1rem;
-  font-size: 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-`;
-
 const ProfileDetailsRight = styledComponents.div`
   flex: 70%;
   position: sticky;
@@ -201,10 +192,9 @@ const Friends = styledComponents.div`
   background: #FFF;
   padding: 2rem;
   border-radius: 10px;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
-  justify-content: space-between;
 `;
 
 const NoFriends = styledComponents.h2`
@@ -237,6 +227,7 @@ function Profile() {
 
   const [userProfile, setUserProfile] = useState({});
   const [userFriends, setUserFriends] = useState([]);
+  const [userFriendRequests, setUserFriendRequests] = useState([]);
 
   const [dob, setDob] = useState("");
   const [website, setWebsite] = useState("");
@@ -256,6 +247,11 @@ function Profile() {
         setBio(user.bio);
         setGender(user.gender);
         setUserFriends(user?.friends?.filter((friend) => friend.status === 1));
+        setUserFriendRequests(
+          user?.friends?.filter(
+            (friend) => friend.status === 0 && friend.type === "sender"
+          )
+        );
         const fship = handleFriendshipStatus(user.friends, userID);
         setFriendship(fship);
       } else {
@@ -267,7 +263,12 @@ function Profile() {
         setBio(res.data.bio);
         setGender(res.data.gender);
         setUserFriends(
-          res.data.friends.filter((friend) => friend.status === 1)
+          res?.data?.friends.filter((friend) => friend.status === 1)
+        );
+        setUserFriendRequests(
+          res?.data?.friends?.filter(
+            (friend) => friend.status === 0 && friend.type === "sender"
+          )
         );
         const fship = handleFriendshipStatus(res.data.friends, userID);
         setFriendship(fship);
@@ -411,14 +412,15 @@ function Profile() {
     }
   };
 
-  const handleAcceptReqeust = async () => {
-    if (!friendship) {
+  const handleAcceptReqeust = async (friendshipID) => {
+    console.log("running");
+    if (!friendshipID) {
       toast.error("Request is not valid.");
       return;
     }
     try {
       const res = await server.post(
-        `/friends/friendRequest/accept/${friendship.friendshipID}`
+        `/friends/friendRequest/accept/${friendshipID}`
       );
       if (res.status === 200) {
         setFriendship((prevFriendship) => {
@@ -517,7 +519,7 @@ function Profile() {
               <>
                 <FriendButton
                   style={{ backgroundColor: "green" }}
-                  onClick={handleAcceptReqeust}
+                  onClick={() => handleAcceptReqeust(friendship.friendshipID)}
                 >
                   <PersonAddIcon />
                   Accept Friend Request
@@ -634,6 +636,9 @@ function Profile() {
           <StyledTabs value={value} onChange={handleChange}>
             <StyledTab label="About" value={"one"} />
             <StyledTab label="Friends" value={"two"} />
+            {userID === localStorage.getItem("userID") && (
+              <StyledTab label="Friend Requests" value={"three"} />
+            )}
           </StyledTabs>
         </TabsBox>
 
@@ -660,8 +665,6 @@ function Profile() {
                 <RowHead>Friends</RowHead>
                 <RowItem>{userFriends?.length}</RowItem>
               </Row>
-
-              <FriendRequestButton>Friend Requests</FriendRequestButton>
             </ProfileDetailsLeft>
             <ProfileDetailsRight>
               {userProfile?.posts?.length > 0 &&
@@ -683,6 +686,21 @@ function Profile() {
             )}
           </Friends>
         </TabPanel>
+
+        {userID === localStorage.getItem("userID") && (
+          <TabPanel value="three">
+            <Friends>
+              {userFriendRequests?.length > 0 &&
+                userFriendRequests.map((request, index) => (
+                  <FriendRequest
+                    key={index}
+                    request={request}
+                    handleAcceptReqeust={handleAcceptReqeust}
+                  />
+                ))}
+            </Friends>
+          </TabPanel>
+        )}
       </TabContext>
     </ProfileComponent>
   );
