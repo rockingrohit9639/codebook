@@ -60,8 +60,11 @@ function Home() {
   const [userFriends, setUserFriends] = useState([]);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
     setUserFriends(user.friends);
-  }, [user]);
+  }, [user, navigate, isAuthenticated]);
 
   return (
     <Container>
