@@ -30,6 +30,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
 import LanguageIcon from "@mui/icons-material/Language";
 import { handleFriendshipStatus } from "../../utils/utils";
+import Post from "../Posts/Post";
 
 const ProfileComponent = styledComponents.div``;
 
@@ -98,13 +99,16 @@ const TabsBox = styledComponents.div`
 const ProfileDetails = styledComponents.div`
   display: flex;
   padding: 1rem clamp(2rem, 12vw, 6rem);
+  gap: 2rem;
 `;
 
 const ProfileDetailsLeft = styledComponents.div`
   flex: 30%;
   padding: 2rem;
+  margin-top: 1rem;
   background-color: #fff;
   border-radius: 5px;
+  max-height: 20rem;
   box-shadow: 10px 12px 15px -10px rgba(0, 0, 0, 0.2);
 `;
 
@@ -132,6 +136,7 @@ const FriendRequestButton = styledComponents.button`
 
 const ProfileDetailsRight = styledComponents.div`
   flex: 70%;
+  position: sticky;
 `;
 
 const ModalBox = styledComponents.div`
@@ -246,6 +251,10 @@ function Profile() {
     const getUserProfile = async () => {
       if (userID === localStorage.getItem("userID")) {
         setUserProfile(user);
+        setDob(user.dob);
+        setWebsite(user.website);
+        setBio(user.bio);
+        setGender(user.gender);
         setUserFriends(user?.friends?.filter((friend) => friend.status === 1));
         const fship = handleFriendshipStatus(user.friends, userID);
         setFriendship(fship);
@@ -253,6 +262,10 @@ function Profile() {
         // Getting user profile
         const res = await server.get(`/users/details/${userID}`);
         setUserProfile(res.data);
+        setDob(res.data.dob);
+        setWebsite(res.data.website);
+        setBio(res.data.bio);
+        setGender(res.data.gender);
         setUserFriends(
           res.data.friends.filter((friend) => friend.status === 1)
         );
@@ -268,11 +281,6 @@ function Profile() {
       return;
     } else {
       getUserProfile();
-
-      setDob(userProfile.dob);
-      setWebsite(userProfile.website);
-      setBio(userProfile.bio);
-      setGender(userProfile.gender);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate, userID, user]);
@@ -348,7 +356,7 @@ function Profile() {
           /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/gi;
         const regex = new RegExp(expression);
 
-        if (!website.match(regex)) {
+        if (!website?.match(regex)) {
           toast.error("Please enter a valid website URL.");
           return;
         } else {
@@ -655,7 +663,12 @@ function Profile() {
 
               <FriendRequestButton>Friend Requests</FriendRequestButton>
             </ProfileDetailsLeft>
-            <ProfileDetailsRight>{/* <Post /> */}</ProfileDetailsRight>
+            <ProfileDetailsRight>
+              {userProfile?.posts?.length > 0 &&
+                userProfile?.posts?.map((post, index) => (
+                  <Post key={index} post={post} />
+                ))}
+            </ProfileDetailsRight>
           </ProfileDetails>
         </TabPanel>
 

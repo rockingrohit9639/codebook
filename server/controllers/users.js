@@ -64,7 +64,7 @@ const getUserDetails = async (req, res) => {
       where: {
         userID: req.params.userid,
       },
-      include: [
+      include: [  
         {
           model: Users,
           attributes: ["userID", "username", "photoURL"],

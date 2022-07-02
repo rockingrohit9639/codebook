@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Friend from "../Friend/Friend";
 import Post from "../Posts/Post";
-import { motion } from "framer-motion";
 
 const Container = styled.div`
   width: 100%;
@@ -51,7 +50,7 @@ const Title = styled.h1`
   margin-bottom: 1rem;
 `;
 
-const AllPosts = styled(motion.div)``;
+const AllPosts = styled.div``;
 
 function Home() {
   const { allPosts } = useSelector((state) => state.posts);
