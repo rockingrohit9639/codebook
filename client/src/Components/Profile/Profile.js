@@ -28,6 +28,7 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
+import LanguageIcon from "@mui/icons-material/Language";
 import { handleFriendshipStatus } from "../../utils/utils";
 
 const ProfileComponent = styledComponents.div``;
@@ -35,11 +36,11 @@ const ProfileComponent = styledComponents.div``;
 const ProfileBg = styledComponents.div`
   width: 100%;
   height: 20vh;
-  background-color: ${(props) => props.bgColor};
+  background-color: ${(props) => props.bgColor || "#fff"};
 `;
 
 const ProfileInfo = styledComponents.div`
-  padding: 1rem clamp(2rem, 12vw, 6rem);
+  padding: 1rem clamp(2rem, 12vw, 6rem);  
   display: flex;
   justify-content: space-between;
 `;
@@ -474,6 +475,16 @@ function Profile() {
           <ProfileName>{userProfile?.username}</ProfileName>
           <ProfileEmail>{userProfile?.email}</ProfileEmail>
           <ProfileBio>{userProfile?.bio}</ProfileBio>
+          {userProfile.website && (
+            <LanguageIcon
+              style={{
+                marginTop: "0.5rem",
+                color: "var(--primary-color)",
+                cursor: "pointer",
+              }}
+              onClick={() => window.open(userProfile.website)}
+            />
+          )}
         </ProfileInfoCenter>
 
         <ProfileInfoRight>
