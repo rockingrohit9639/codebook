@@ -3,6 +3,7 @@ const Posts = db.posts;
 const Likes = db.likes;
 const Comments = db.comments;
 const Users = db.users;
+const sequelize = require("sequelize");
 
 const createPost = async (req, res) => {
   if (!req.body.imgURL) {
@@ -254,6 +255,27 @@ const getLikes = async (req, res) => {
   }
 };
 
+const getSearchPosts = async (req, res) => {
+  try {
+    const query = req.query.q.toLowerCase();
+
+    const posts = await Posts.findAll({
+      where: {
+        postTitle: sequelize.where(
+          sequelize.fn("LOWER", sequelize.col("postTitle")),
+          "LIKE",
+          "%" + query + "%"
+        ),
+      },
+    });
+
+    return res.status(200).json(posts);
+  } catch (err) {
+    console.log(err);
+    return res.status(5000).json({ message: "Internal Server Error." });
+  }
+};
+
 module.exports = {
   createPost,
   getAllPosts,
@@ -265,4 +287,5 @@ module.exports = {
   deleteComment,
   getComments,
   getLikes,
+  getSearchPosts,
 };
