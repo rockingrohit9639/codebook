@@ -152,7 +152,7 @@ const deleteFriends = async (req, res) => {
     }
 
     await friend.destroy();
-    return res.statu(200).json({ message: "Friendship Deleted!" });
+    return res.status(200).json({ message: "Friendship Deleted!" });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Internal Server Error!" });

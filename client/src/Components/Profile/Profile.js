@@ -21,7 +21,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   setUserProfilePhoto,
   updateUserDetails,
-  updateUserFriends,
+  addUserFriend,
+  removeUserFriend,
 } from "../../redux/userRedux";
 import Dropdown from "../Dropdown/Dropdown";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
@@ -86,16 +87,6 @@ const TabsBox = styledComponents.div`
   align-items: center;
   gap: 1rem;
 `;
-
-// const StyledTab = styledComponents(Tabs)`
-//   color: #000;
-//   padding: 0.5rem 1rem;
-//   border-radius: 5px;
-//   &.active {
-//     color: #fff;
-//     background-color: var(--primary-color);
-//   }
-// `;
 
 const ProfileDetails = styledComponents.div`
   display: flex;
@@ -413,7 +404,6 @@ function Profile() {
   };
 
   const handleAcceptReqeust = async (friendshipID) => {
-    console.log("running");
     if (!friendshipID) {
       toast.error("Request is not valid.");
       return;
@@ -431,13 +421,40 @@ function Profile() {
           return [...prevFriends, friendship];
         });
         dispatch(
-          updateUserFriends({
+          addUserFriend({
             userID,
             username: userProfile.username,
             photoURL: userProfile.photoURL,
             status: 1,
           })
         );
+      } else {
+        toast.error("Something went wrong.");
+      }
+    } catch (err) {
+      if (err.response) {
+        toast.error(err.response.data.message);
+      }
+      console.log(err);
+    }
+  };
+
+  const handleRemoveFriend = async (friendshipID) => {
+    if (!friendshipID) {
+      toast.error("Request is not valid.");
+      return;
+    }
+    try {
+      const res = await server.delete(`/friends/delete/${friendshipID}`);
+
+      if (res.status === 200) {
+        setUserFriends((prevFriends) => {
+          return prevFriends.filter((friend) => friend.id !== friendshipID);
+        });
+
+        setFriendship(null);
+
+        dispatch(removeUserFriend({ friendshipID }));
       } else {
         toast.error("Something went wrong.");
       }
@@ -503,7 +520,10 @@ function Profile() {
           )}
 
           {friendship?.status === 1 && (
-            <FriendButton style={{ backgroundColor: "red" }}>
+            <FriendButton
+              style={{ backgroundColor: "red" }}
+              onClick={() => handleRemoveFriend(friendship.friendshipID)}
+            >
               <PersonRemoveIcon />
               Remove Friend
             </FriendButton>
@@ -511,7 +531,10 @@ function Profile() {
 
           {friendship?.status === 0 &&
             (friendship.type === "sender" ? (
-              <FriendButton style={{ backgroundColor: "red" }}>
+              <FriendButton
+                style={{ backgroundColor: "red" }}
+                onClick={() => handleRemoveFriend(friendship.friendshipID)}
+              >
                 <CancelIcon />
                 Cancel Friend Request
               </FriendButton>
@@ -524,7 +547,10 @@ function Profile() {
                   <PersonAddIcon />
                   Accept Friend Request
                 </FriendButton>
-                <FriendButton style={{ backgroundColor: "grey " }}>
+                <FriendButton
+                  style={{ backgroundColor: "grey " }}
+                  onClick={() => handleRemoveFriend(friendship.friendshipID)}
+                >
                   <PersonAddIcon />
                   Reject Friend Request
                 </FriendButton>

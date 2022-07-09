@@ -9,6 +9,7 @@ const userSlice = createSlice({
   name: "User",
   initialState,
   reducers: {
+    // User Details
     setAuth: (state, action) => {
       state.isAuthenticated = action.payload;
     },
@@ -21,15 +22,28 @@ const userSlice = createSlice({
     updateUserDetails: (state, action) => {
       state.user = { ...state.user, ...action.payload };
     },
-    setUserFriends: (state, action) => {
-      state.user.friends = action.payload;
-    },
-    updateUserFriends: (state, action) => {
-      state.user.friends = [...state.user.friends, action.payload];
-    },
+
+    // User Posts
     setUserPosts: (state, action) => {
       state.user.posts = action.payload;
     },
+
+    // User Friends
+    setUserFriends: (state, action) => {
+      state.user.friends = action.payload;
+    },
+
+    addUserFriend: (state, action) => {
+      state.user.friends = [...state.user.friends, action.payload];
+    },
+
+    removeUserFriend: (state, action) => {
+      state.user.friends = state.user.friends.filter(
+        (friend) => friend.uid !== action.payload
+      );
+    },
+
+    // Logout
     logout: (state) => {
       state.isAuthenticated = false;
       state.user = {};
@@ -45,6 +59,7 @@ export const {
   updateUserDetails,
   setUserFriends,
   setUserPosts,
-  updateUserFriends,
+  addUserFriend,
+  removeUserFriend,
 } = userSlice.actions;
 export default userSlice.reducer;
