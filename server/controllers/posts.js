@@ -267,6 +267,12 @@ const getSearchPosts = async (req, res) => {
           "%" + query + "%"
         ),
       },
+      include: [
+        {
+          model: Users,
+          attributes: ["userID", "username", "photoURL"],
+        },
+      ],
     });
 
     return res.status(200).json(posts);
