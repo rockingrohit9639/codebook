@@ -82,13 +82,16 @@ function Home() {
         {isAuthenticated && userFriends?.length > 0 ? (
           <FriendsBox>
             <Title>Your Friends</Title>
-            {userFriends?.map((friend, index) => (
-              <Friend
-                key={index}
-                friend={friend}
-                style={{ marginTop: "1rem" }}
-              />
-            ))}
+            {userFriends?.map(
+              (friend, index) =>
+                friend.status === 1 && (
+                  <Friend
+                    key={index}
+                    friend={friend}
+                    style={{ marginTop: "1rem" }}
+                  />
+                )
+            )}
           </FriendsBox>
         ) : null}
       </HomeRight>

@@ -218,7 +218,6 @@ function Profile() {
 
   const [userProfile, setUserProfile] = useState({});
   const [userFriends, setUserFriends] = useState([]);
-  const [userFriendRequests, setUserFriendRequests] = useState([]);
 
   const [dob, setDob] = useState("");
   const [website, setWebsite] = useState("");
@@ -238,11 +237,6 @@ function Profile() {
         setBio(user.bio);
         setGender(user.gender);
         setUserFriends(user?.friends?.filter((friend) => friend.status === 1));
-        setUserFriendRequests(
-          user?.friends?.filter(
-            (friend) => friend.status === 0 && friend.type === "sender"
-          )
-        );
         const fship = handleFriendshipStatus(user.friends, userID);
         setFriendship(fship);
       } else {
@@ -255,11 +249,6 @@ function Profile() {
         setGender(res.data.gender);
         setUserFriends(
           res?.data?.friends.filter((friend) => friend.status === 1)
-        );
-        setUserFriendRequests(
-          res?.data?.friends?.filter(
-            (friend) => friend.status === 0 && friend.type === "sender"
-          )
         );
         const fship = handleFriendshipStatus(res.data.friends, userID);
         setFriendship(fship);
@@ -412,6 +401,7 @@ function Profile() {
       const res = await server.post(
         `/friends/friendRequest/accept/${friendshipID}`
       );
+
       if (res.status === 200) {
         setFriendship((prevFriendship) => {
           return { ...prevFriendship, status: 1 };
@@ -420,6 +410,7 @@ function Profile() {
         setUserFriends((prevFriends) => {
           return [...prevFriends, friendship];
         });
+
         dispatch(
           addUserFriend({
             userID,
@@ -662,9 +653,6 @@ function Profile() {
           <StyledTabs value={value} onChange={handleChange}>
             <StyledTab label="About" value={"one"} />
             <StyledTab label="Friends" value={"two"} />
-            {userID === localStorage.getItem("userID") && (
-              <StyledTab label="Friend Requests" value={"three"} />
-            )}
           </StyledTabs>
         </TabsBox>
 
@@ -712,21 +700,6 @@ function Profile() {
             )}
           </Friends>
         </TabPanel>
-
-        {userID === localStorage.getItem("userID") && (
-          <TabPanel value="three">
-            <Friends>
-              {userFriendRequests?.length > 0 &&
-                userFriendRequests.map((request, index) => (
-                  <FriendRequest
-                    key={index}
-                    request={request}
-                    handleAcceptReqeust={handleAcceptReqeust}
-                  />
-                ))}
-            </Friends>
-          </TabPanel>
-        )}
       </TabContext>
     </ProfileComponent>
   );

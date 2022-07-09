@@ -7,6 +7,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 const FriendRequestWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-around;
   gap: 0.5rem;
   border: 1px solid rgba(0, 0, 0, 0.2);
   padding: 0.8rem 1rem;
