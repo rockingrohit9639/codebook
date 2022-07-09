@@ -35,7 +35,11 @@ function App() {
           `/users/details/${JSON.parse(userID)}`
         );
         dispatch(setUser(userInfo.data));
-        dispatch(setUserFriends(userInfo.data.friends));
+        dispatch(
+          setUserFriends(
+            userInfo.data.friends.filter((friend) => friend.status === 1)
+          )
+        );
         dispatch(setUserPosts(userInfo.data.posts));
 
         const { data } = await server.get("/posts/getAllPosts");
