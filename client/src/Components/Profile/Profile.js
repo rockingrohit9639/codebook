@@ -32,7 +32,6 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import LanguageIcon from "@mui/icons-material/Language";
 import { handleFriendshipStatus } from "../../utils/utils";
 import Post from "../Posts/Post";
-import FriendRequest from "../FriendRequest/FriendRequest";
 
 const ProfileComponent = styledComponents.div``;
 
@@ -204,6 +203,19 @@ const FriendButton = styledComponents.button`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+`;
+
+const FriendRequestButton = styledComponents.button`
+  border: none;
+  outline: none;
+  padding: 0.8rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: var(--primary-color);
+  color: #fff;
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 1rem;
 `;
 
 function Profile() {
@@ -652,7 +664,10 @@ function Profile() {
         <TabsBox>
           <StyledTabs value={value} onChange={handleChange}>
             <StyledTab label="About" value={"one"} />
-            <StyledTab label="Friends" value={"two"} />
+            <StyledTab
+              label={`Friends (${userFriends?.length})`}
+              value={"two"}
+            />
           </StyledTabs>
         </TabsBox>
 
@@ -679,6 +694,8 @@ function Profile() {
                 <RowHead>Friends</RowHead>
                 <RowItem>{userFriends?.length}</RowItem>
               </Row>
+
+              <FriendRequestButton>Friend Requests</FriendRequestButton>
             </ProfileDetailsLeft>
             <ProfileDetailsRight>
               {userProfile?.posts?.length > 0 &&
