@@ -267,11 +267,22 @@ const getSearchPosts = async (req, res) => {
 
     const posts = await Posts.findAll({
       where: {
-        postTitle: sequelize.where(
-          sequelize.fn("LOWER", sequelize.col("postTitle")),
-          "LIKE",
-          "%" + query + "%"
-        ),
+        [sequelize.Op.or]: [
+          {
+            postTitle: sequelize.where(
+              sequelize.fn("LOWER", sequelize.col("postTitle")),
+              "LIKE",
+              "%" + query + "%"
+            ),
+          },
+          {
+            codeSnippet: sequelize.where(
+              sequelize.fn("LOWER", sequelize.col("codeSnippet")),
+              "LIKE",
+              "%" + query + "%"
+            ),
+          },
+        ],
       },
       include: [
         {
