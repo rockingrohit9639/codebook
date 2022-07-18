@@ -10,3 +10,9 @@ export const Button = styled.button`
   color: #fff;
   border-radius: 5px;
 `;
+
+export const Container = styled.div`
+  padding-inline: 1rem;
+  margin-inline: auto;
+  max-width: 80rem;
+`;

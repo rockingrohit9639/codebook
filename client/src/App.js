@@ -1,10 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./Components/Login/Login";
 import Navbar from "./Components/Navbar/Navbar";
 import Signup from "./Components/Signup/Signup";
@@ -20,6 +16,7 @@ import CreatePost from "./Components/CreatePost/CreatePost";
 import server from "./axios/instance";
 import Home from "./Components/Home/Home";
 import { setAllPosts } from "./redux/postsRedux";
+import SearchResults from "./Components/SearchResults/SearchResults";
 
 function App() {
   const dispatch = useDispatch();
@@ -69,6 +66,7 @@ function App() {
           <Route path="/logout" element={<Logout />} />
           <Route path="/profile/:userID" element={<Profile />} />
           <Route path="/create-post" element={<CreatePost />} />
+          <Route path="/search" element={<SearchResults />} />
         </Routes>
       </Router>
     </div>
