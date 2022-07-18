@@ -13,11 +13,17 @@ const createPost = async (req, res) => {
   if (!req.body.postTitle) {
     return res.status(403).json({ message: "Post title is required." });
   }
+
+  if (!req.body.codeSnippet) {
+    return res.status(403).json({ message: "Code snippet is required." });
+  }
+
   try {
     let post = await Posts.create({
       postTitle: req.body.postTitle,
       imgURL: req.body.imgURL,
       userID: req.userID,
+      codeSnippet: req.body.codeSnippet,
     });
 
     if (!post) {

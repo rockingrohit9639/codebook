@@ -305,6 +305,7 @@ function CreatePost() {
       const data = {
         postTitle,
         imgURL,
+        codeSnippet: editorValue,
       };
 
       // Addind post data on server

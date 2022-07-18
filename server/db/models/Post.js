@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
         {
           unique: false,
           fields: ["postTitle", "codeSnippet"],
+          name: "postSearch_index"
         },
       ],
     }
